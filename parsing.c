@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:15 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/12 16:46:08 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/12 17:28:47 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,38 +129,48 @@ char **copy_map(char **map, int height)
 
 // Libérer la copie de la carte
 
-int flood_fill(t_data *data)
+int flood_fill(char **map, int x, int y, int max_len, int height)
 {
-	if (data->p_x < 0 || )
+	if (x < 0 || y < 0 || y >= height || x >= max_len || map[y][x] == '\0')
+		return (0);
+	if (is_wall_or_space(map[y][x]))
+		return (1);
+	map[y][x] = ' ';
+	if (!flood_fill(map, x + 1, y, max_len, height)
+		|| !flood_fill(map, x - 1, y, max_len, height)
+		|| !flood_fill(map, x, y - 1, max_len, height)
+		|| !flood_fill(map, x, y + 1, max_len, height))
+		return (0);
+	return (1);
 }
 
 
 
 // Vérification récursive pour explorer les cellules traversables et s'assurer qu'elles sont entourées de murs
-int flood_fill(char **map, int x, int y, int max_len, int height) {
-	// Si on est hors des limites de la carte ou sur une cellule invalide, c'est une erreur
-	if (x < 0 || y < 0 || y >= height || x >= max_len || map[y][x] == '\0') {
-		return 0;  // La carte n'est pas fermée
-	}
+// int flood_fill(char **map, int x, int y, int max_len, int height) {
+// 	// Si on est hors des limites de la carte ou sur une cellule invalide, c'est une erreur
+// 	if (x < 0 || y < 0 || y >= height || x >= max_len || map[y][x] == '\0') {
+// 		return 0;  // La carte n'est pas fermée
+// 	}
 
-	// Si on touche un mur ou un espace, c'est valide (rien à explorer)
-	if (is_wall_or_space(map[y][x])) {
-		return 1;
-	}
+// 	// Si on touche un mur ou un espace, c'est valide (rien à explorer)
+// 	if (is_wall_or_space(map[y][x])) {
+// 		return 1;
+// 	}
 
-	// Marquer la cellule comme visitée en la transformant en espace pour éviter de la revisiter
-	map[y][x] = ' ';
+// 	// Marquer la cellule comme visitée en la transformant en espace pour éviter de la revisiter
+// 	map[y][x] = ' ';
 
-	// Vérifier les 4 directions (haut, bas, gauche, droite)
-	if (!flood_fill(map, x + 1, y, max_len, height) ||  // Droite
-		!flood_fill(map, x - 1, y, max_len, height) ||  // Gauche
-		!flood_fill(map, x, y + 1, max_len, height) ||  // Bas
-		!flood_fill(map, x, y - 1, max_len, height)) {  // Haut
-		return 0;  // Si une direction retourne 0, la carte n'est pas fermée
-	}
+// 	// Vérifier les 4 directions (haut, bas, gauche, droite)
+// 	if (!flood_fill(map, x + 1, y, max_len, height) ||  // Droite
+// 		!flood_fill(map, x - 1, y, max_len, height) ||  // Gauche
+// 		!flood_fill(map, x, y + 1, max_len, height) ||  // Bas
+// 		!flood_fill(map, x, y - 1, max_len, height)) {  // Haut
+// 		return 0;  // Si une direction retourne 0, la carte n'est pas fermée
+// 	}
 
-	return 1;  // Toutes les directions sont valides
-}
+// 	return 1;  // Toutes les directions sont valides
+// }
 
 // Trouver la longueur maximale des lignes
 int find_max_len(char **map) {
@@ -239,7 +249,7 @@ int main(void) {
     "1000101010001",
     "1111010101111",
     "1000101010001",
-    "1010111010101",
+    "101011101010E",
     "1000100001001",
     "1011101011101",
     "1100001000011",
