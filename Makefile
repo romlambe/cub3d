@@ -6,7 +6,7 @@
 #    By: romlambe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/04 15:52:08 by romlambe          #+#    #+#              #
-#    Updated: 2024/09/12 17:15:19 by romlambe         ###   ########.fr        #
+#    Updated: 2024/09/13 13:14:40 by romlambe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,12 +16,14 @@ AUTHOR = romlambe
 CC = gcc
 
 
-SRC = parsing.c
+SRC = parsing.c initialization.c
 LIBFT = libft/libft.a
 MINILIBX = minilibx-linux/libmlx.a
+GNL = gnl/get_next_line.c gnl/get_next_line_utils.c
 
 LIBRARY = -L/usr/X11R6/lib -lX11 -lXext
 OBJ = $(SRC:.c=.o)
+GNL_OBJ = $(GNL:.c=.o)
 
 GREEN = \033[0;32m
 NC = \033[0m
@@ -38,10 +40,10 @@ $(LIBFT):
 	make -C libft
 
 $(MINILIBX):
-	make -C minilibx
+	make -C minilibx-linux
 
-$(NAME): $(OBJ) $(LIBFT) $(MINILIBX)
-	$(CC) $(CFLAGS) $(OBJ) $(LIBRARY) $(LIBFT) -o $(NAME) -lm
+$(NAME): $(OBJ) $(LIBFT) $(MINILIBX) $(GNL_OBJ)
+	$(CC) $(CFLAGS) $(OBJ) $(MINILIBX) $(LIBRARY) $(LIBFT) $(GNL_OBJ) -o $(NAME) -lm
 	echo "\n$(GREEN)Cub3D is created.$(NC)\n"
 
 %.o: %.c
@@ -50,10 +52,15 @@ $(NAME): $(OBJ) $(LIBFT) $(MINILIBX)
 clean:
 	echo "$(GREEN)Cub3D: Cleaning object files..."
 	rm -rf $(OBJ)
+	rm -rf $(GNL_OBJ)
+	make clean -C libft
+	make clean -C minilibx-linux
 
 fclean: clean
 	echo "$(GREEN)Cub3D: Cleaning all build files..."
 	rm -f $(NAME)
+	make clean -C libft
+	make clean -C minilibx
 
 re: fclean all
 
