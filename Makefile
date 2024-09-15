@@ -6,7 +6,7 @@
 #    By: romlambe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/04 15:52:08 by romlambe          #+#    #+#              #
-#    Updated: 2024/09/13 13:14:40 by romlambe         ###   ########.fr        #
+#    Updated: 2024/09/15 19:19:20 by romlambe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -16,7 +16,7 @@ AUTHOR = romlambe
 CC = gcc
 
 
-SRC = parsing.c initialization.c
+SRC = parsing.c initialization.c raycasting.c render.c
 LIBFT = libft/libft.a
 MINILIBX = minilibx-linux/libmlx.a
 GNL = gnl/get_next_line.c gnl/get_next_line_utils.c

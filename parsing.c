@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:15 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/13 14:30:06 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/15 15:29:24 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -178,22 +178,51 @@ int	is_map_closed(char **map)
 	return (free_map(map_copy, height), 1);
 }
 
+int	search_player_pos(t_data *data)
+{
+	int	i;
+	int	j;
+
+	i = 0;
+	while (data->map[i])
+	{
+		j = 0;
+		while(data->map[i][j])
+		{
+			if (data->map[i][j] == 'E' || data->map[i][j] == 'S'
+				|| data->map[i][j] == 'N' || data->map[i][j] == 'W')
+			{
+			data->p_x = j;
+			data->p_y = i;
+			return (0);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (1);
+}
+
 int main(int ac, char **av) {
 
 	t_data *data;
 	data = init_argument(av);
-
+	if (search_player_pos(data) == 1)
+		return 1;
+	for (int i = 0; i < data->h_size; i++)
+		printf("%s\n", data->map[i]);
+	printf("p_x: %d\np_y: %d\nname: %s\n", data->p_x, data->p_y, data->name);
 
 	start_the_game(data);
-	// if (check_char(&data) == 0)
-	// 	printf("pb\n");
+	if (check_char(data) == 0)
+		printf("pb\n");
 
 	// // Tester si la carte est fermée
-	// if (is_map_closed(data.map)) {
-	// 	printf("La carte est fermée.\n");
-	// } else {
-	// 	printf("La carte n'est pas fermée.\n");
-	// }
+	if (is_map_closed(data->map)) {
+		printf("La carte est fermée.\n");
+	} else {
+		printf("La carte n'est pas fermée.\n");
+	}
 
 	return 0;
 }

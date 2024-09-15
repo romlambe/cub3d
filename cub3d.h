@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/13 13:19:39 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/15 19:38:37 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,6 +62,7 @@ typedef struct	s_mlx
 {
 	void		*mlx;
 	void		*win;
+	void		*img;
 	t_player	*player;
 	t_ray		*ray;
 	t_data		*data;
@@ -78,6 +79,7 @@ int flood_fill(char **map, int x, int y, int max_len, int height);
 int	find_max_len(char **map);
 int	find_map_height(char **map);
 int	is_map_closed(char **map);
+int	search_player_pos(t_data *data);
 
 
 
@@ -87,6 +89,22 @@ int	game_loop(void *ml);
 void	init_player(t_mlx *mlx);
 t_data	*init_argument(char **av);
 
+
+//Ray Casting//
+void	cast_ray(t_mlx *mlx);
+float	nor_angle(float angle);
+float	get_vertical_inter(t_mlx *mlx, float angle);
+float	get_horizontal_inter(t_mlx *mlx, float angle);
+int		wall_hit(float x, float y, t_mlx *mlx);
+int		inter_chek(float angle, float *inter, float *step, int is_horizon);
+int		unit_circle(float angle, char c);
+
+//Render//
+void	put_pixel(t_mlx *mlx, int x, int y, int color);
+void	draw_floor(t_mlx *mlx, int ray, int c_pix, int f_pix);
+int		get_texture(t_mlx *mlx, int flag);
+void	draw_wall(t_mlx *mlx, int ray, int f_pix, int c_pix);
+void	render_wall(t_mlx *mlx, int ray);
 
 #endif
 

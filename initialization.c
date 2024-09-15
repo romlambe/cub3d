@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:04:49 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/13 14:35:49 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/15 19:44:49 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,11 +33,11 @@ int	game_loop(void *ml)
 	t_mlx	*mlx;
 
 	mlx = ml;
-	mlx_destroy_image(mlx->mlx, mlx->win);
+	// mlx_destroy_image(mlx->mlx, mlx->win);
 	mlx->win = mlx_new_image(mlx->mlx, H_S, W_S);
 	//ft hook pour la rota du perso i guess
-	//ft cast ray pour envoyer les rayons
-	mlx_put_image_to_window(mlx->mlx, mlx->win, 0, 0, 0);
+	cast_ray(mlx);
+	// mlx_put_image_to_window(mlx->mlx, mlx->win, 0, 0, 0);
 	return 0;
 }
 
@@ -49,6 +49,8 @@ void	init_player(t_mlx *mlx)
 	mlx->player->fov_rd = (FOV * M_PI) / 180;
 }
 
+// si pas de map return une erreur
+// faire ft pour recup la map (un peu plus tard la flemme la)
 t_data	*init_argument(char **av)
 {
 	t_data *data;
@@ -60,7 +62,6 @@ t_data	*init_argument(char **av)
     data->map[3] = "10E0001";
     data->map[4] = "1111111";
     data->map[5] = NULL;
-
 
 	data->w_size = find_max_len(data->map);
 	data->h_size = find_map_height(data->map);
