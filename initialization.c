@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:04:49 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/15 19:44:49 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/15 20:08:36 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,7 @@ void	start_the_game(t_data *data)
 	mlx.ray = ft_calloc(1, sizeof(t_ray));
 	mlx.mlx = mlx_init();
 	mlx.win = mlx_new_window(mlx.mlx, W_S, H_S, "Cube3D");
+	mlx.img = mlx_new_image(mlx.mlx, H_S, W_S);
 	init_player(&mlx);
 	mlx_loop_hook(mlx.mlx, &game_loop, &mlx);
 	// mlx_key_hook(mlx.win, &mlx_key, &mlx);
@@ -33,11 +34,10 @@ int	game_loop(void *ml)
 	t_mlx	*mlx;
 
 	mlx = ml;
-	// mlx_destroy_image(mlx->mlx, mlx->win);
-	mlx->win = mlx_new_image(mlx->mlx, H_S, W_S);
+	// mlx->win = mlx_new_image(mlx->mlx, H_S, W_S);
 	//ft hook pour la rota du perso i guess
 	cast_ray(mlx);
-	// mlx_put_image_to_window(mlx->mlx, mlx->win, 0, 0, 0);
+	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->img, 0, 0);
 	return 0;
 }
 
@@ -57,9 +57,9 @@ t_data	*init_argument(char **av)
 	data = malloc(sizeof(t_data));
 	data->map = malloc(sizeof(char *) * 6);  // 5 lignes + NULL
     data->map[0] = "111  11";
-    data->map[1] = "1010 11";
-    data->map[2] = "1011101";
-    data->map[3] = "10E0001";
+    data->map[1] = "1001111";
+    data->map[2] = "1000101";
+    data->map[3] = "10N0001";
     data->map[4] = "1111111";
     data->map[5] = NULL;
 
