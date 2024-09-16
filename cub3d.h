@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/15 19:59:42 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:48:55 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,6 +58,16 @@ typedef struct	s_data
 	int		height;
 }t_data;
 
+typedef struct	s_image
+{
+	void	*img;
+	char	*addr;
+	int		bit_per_pixel;
+	int		lenght_line;
+	int		endian;
+
+}				t_image;
+
 typedef struct	s_mlx
 {
 	void		*mlx;
@@ -66,6 +76,7 @@ typedef struct	s_mlx
 	t_player	*player;
 	t_ray		*ray;
 	t_data		*data;
+	t_image		*image;
 }t_mlx;
 
 //Parsing//

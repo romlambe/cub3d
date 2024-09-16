@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 15:31:43 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/15 19:50:35 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:45:04 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,17 +101,17 @@ float	get_vertical_inter(t_mlx *mlx, float angle)
 	int		pixel;
 
 	x_step = TILE_SIZE;
-	y_step = TILE_SIZE / tan(angle);
+	y_step = TILE_SIZE * tan(angle);
 	v_x = floor(mlx->player->x_ply / TILE_SIZE) * TILE_SIZE;
 	pixel = inter_chek(angle, &v_x, &x_step, 0);
-	v_y = mlx->player->y_ply + (v_x - mlx->player->x_ply) / tan(angle);
+	v_y = mlx->player->y_ply + (v_x - mlx->player->x_ply) * tan(angle);
 	if ((unit_circle(angle, 'x') && y_step < 0)
 		|| (!unit_circle(angle, 'x') && y_step > 0))
 		y_step *= -1;
 	while (wall_hit(v_x - pixel, v_y, mlx))
 	{
 		v_x += x_step;
-		v_y += x_step;
+		v_y += y_step;
 	}
 	return (sqrt(pow(v_x - mlx->player->x_ply, 2) + pow(v_y - mlx->player->y_ply, 2)));
 }
@@ -136,8 +136,8 @@ void	cast_ray(t_mlx *mlx)
 	while (ray < W_S)
 	{
 		mlx->ray->wall_flag = 0;
-		v_inter = get_vertical_inter(mlx, nor_angle(mlx->ray->ray_ngl));
 		h_inter = get_horizontal_inter(mlx, nor_angle(mlx->ray->ray_ngl));
+		v_inter = get_vertical_inter(mlx, nor_angle(mlx->ray->ray_ngl));
 		if (v_inter <= h_inter)
 			mlx->ray->distance = v_inter;
 		else
@@ -147,6 +147,6 @@ void	cast_ray(t_mlx *mlx)
 		}
 		render_wall(mlx, ray);
 		ray++;
-		mlx->ray->ray_ngl += mlx->player->fov_rd / H_S;
+		mlx->ray->ray_ngl += (mlx->player->fov_rd / W_S);
 	}
 }

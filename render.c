@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 16:28:11 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/15 20:08:18 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/16 12:39:08 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,15 @@
 
 void	put_pixel(t_mlx *mlx, int x, int y, int color)
 {
+	char *dest;
+
 	if (x < 0 || x >= W_S)
 		return ;
 	if (y < 0 || y >= H_S)
 		return ;
-	mlx_pixel_put(mlx->mlx, mlx->win, x, y, color);
+	dest = (char *)mlx->image->addr + (y * mlx->image->lenght_line + x * (mlx->image->bit_per_pixel / 8));
+	// mlx_pixel_put(mlx->mlx, mlx->win, x, y, color);
+	*(unsigned int *)dest = color;
 }
 
 void	draw_floor(t_mlx *mlx, int ray, int c_pix, int f_pix)
@@ -27,10 +31,10 @@ void	draw_floor(t_mlx *mlx, int ray, int c_pix, int f_pix)
 
 	i = f_pix;
 	while (i < H_S)
-		put_pixel(mlx, ray, i++, 0xB99470FF);
+		put_pixel(mlx, ray, i++, 0x000000);
 	i = 0;
 	while (i < c_pix)
-		put_pixel(mlx, ray, i++,  0xB99470FF);
+		put_pixel(mlx, ray, i++, 0x0000000);
 }
 
 int	get_texture(t_mlx *mlx, int flag) //pour le moment je balance que des couleurs
@@ -38,17 +42,17 @@ int	get_texture(t_mlx *mlx, int flag) //pour le moment je balance que des couleu
 	mlx->ray->ray_ngl = nor_angle(mlx->ray->ray_ngl);
 	if (flag == 0)
 	{
-		if (mlx->ray->ray_ngl < (3 * M_PI) / 2 && mlx->ray->ray_ngl > M_PI / 2)
-			return (0x00FF00); //rouge
+		if (mlx->ray->ray_ngl <= 3 * (M_PI / 2) && mlx->ray->ray_ngl >= M_PI / 2)
+			return (0xADD8E6); //bleu clair
 		else
-			return (0xFF0001); //vert
+			return (0x0000CD); //bleu moyen
 	}
 	else
 	{
-		if (mlx->ray->ray_ngl <  M_PI && mlx->ray->ray_ngl > M_PI / 2)
-			return (0x0000FF); // bleu
+		if (mlx->ray->ray_ngl <  M_PI && mlx->ray->ray_ngl > 0)
+			return (0x00008B); // bleu foncé
 		else
-			return (0xFFFF00); // jaune
+			return (0x87CEEB); // bleu ciel
 	}
 }
 
@@ -67,14 +71,14 @@ void	render_wall(t_mlx *mlx, int ray)
 	double	f_pix;
 	double	c_pix;
 
-	mlx->ray->distance = cos(nor_angle(mlx->ray->ray_ngl - mlx->player->angle));
+	mlx->ray->distance *= cos(nor_angle(mlx->ray->ray_ngl - mlx->player->angle));
 	wall_h = (TILE_SIZE / mlx->ray->distance) * ((W_S / 2) / tan(mlx->player->fov_rd / 2));
 	f_pix = (H_S / 2) + (wall_h / 2);
 	c_pix = (H_S / 2) - (wall_h / 2);
 	if (f_pix > H_S)
-		f_pix = H_S;
+		f_pix = H_S - 1;
 	if (c_pix < 0)
 		c_pix = 0;
-	draw_wall(mlx, ray, c_pix, f_pix);
 	draw_floor(mlx, ray, c_pix, f_pix);
+	draw_wall(mlx, ray, c_pix, f_pix);
 }
