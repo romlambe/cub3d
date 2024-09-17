@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:04:49 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/17 15:04:48 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/17 18:14:38 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,9 +65,18 @@ void	init_player(t_mlx *mlx)
 {
 	mlx->player->x_ply = mlx->data->p_x * TILE_SIZE + TILE_SIZE / 2;
 	mlx->player->y_ply = mlx->data->p_y * TILE_SIZE + TILE_SIZE / 2;
-	mlx->player->angle = 3 * M_PI/2;
+	mlx->player->angle = 3 * M_PI / 2;
 	mlx->player->fov_rd = (FOV * M_PI) / 180;
+
+	// Calcul des vecteurs directionnels
+	mlx->player->dir_x = cos(mlx->player->angle);
+	mlx->player->dir_y = sin(mlx->player->angle);
+
+	// Calcul du plan caméra (ajustez la valeur 0.66 selon votre FOV)
+	mlx->player->plane_x = -mlx->player->dir_y * tan(mlx->player->fov_rd / 2);
+	mlx->player->plane_y = mlx->player->dir_x * tan(mlx->player->fov_rd / 2);
 }
+
 // 2 * MPI = E
 // 3 * MPI/2 = N
 // MPI = W
@@ -81,13 +90,13 @@ t_data	*init_argument(char **av)
 	t_data *data;
 	data = malloc(sizeof(t_data));
 	data->map = malloc(sizeof(char *) * 7);  // 5 lignes + NULL
-    data->map[0] = "1111111";
-    data->map[1] = "1000001";
-    data->map[2] = "1010001";
-    data->map[3] = "1000111";
+	data->map[0] = "1111111";
+	data->map[1] = "1000001";
+	data->map[2] = "1010001";
+	data->map[3] = "1000111";
 	data->map[4] = "100N001";
-    data->map[5] = "1111111";
-    data->map[6] = NULL;
+	data->map[5] = "1111111";
+	data->map[6] = NULL;
 
 	data->w_size = find_max_len(data->map);
 	data->h_size = find_map_height(data->map);

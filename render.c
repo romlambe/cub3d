@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 16:28:11 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/17 15:29:44 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/17 18:14:13 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,32 +36,31 @@ void	draw_floor(t_mlx *mlx, int ray, int c_pix, int f_pix)
 		put_pixel(mlx, ray, i++, 0x0000000);
 }
 
-int	get_texture(t_mlx *mlx, int flag) //pour le moment je balance que des couleurs
+int get_texture(t_mlx *mlx)
 {
-	mlx->ray->ray_ngl = nor_angle(mlx->ray->ray_ngl);
-	if (flag == 0)
+	if (mlx->ray->wall_flag == 0)
 	{
-		if (mlx->ray->ray_ngl > M_PI / 2 && mlx->ray->ray_ngl < 3 * (M_PI / 2))
-			return (0xADD8E6); //bleu clair west
-		else{
-			printf ("c le mur est ici \n");
-			return (0x98FB98); //vert pâle est
-		}
+		if (mlx->ray->ray_dir_x > 0)
+			return (0xADD8E6);
+		else
+			return (0x98FB98);
 	}
 	else
 	{
-		if (mlx->ray->ray_ngl > 0 && mlx->ray->ray_ngl < M_PI)
-			return (0x00008B); // bleu foncé sud
+		if (mlx->ray->ray_dir_y > 0)
+			return (0x00008B);
 		else
-			return (0xFFA07A); // orange clair nord
+			return (0xFFA07A);
 	}
 }
+
+
 
 void	draw_wall(t_mlx *mlx, int ray, int c_pix, int f_pix)
 {
 	int color;
 
-	color = get_texture(mlx, mlx->ray->wall_flag);
+	color = get_texture(mlx);
 	printf("Ray: %d, c_pix: %d, f_pix: %d, Couleur: %06X\n", ray, c_pix, f_pix, color);
 	while (c_pix < f_pix)
 		put_pixel(mlx, ray, c_pix++, color);
@@ -69,12 +68,12 @@ void	draw_wall(t_mlx *mlx, int ray, int c_pix, int f_pix)
 
 void	render_wall(t_mlx *mlx, int ray)
 {
-	double	wall_h;
-	double	f_pix;
-	double	c_pix;
+	double  wall_h;
+	double  f_pix;
+	double  c_pix;
 
-	mlx->ray->distance *= cos(nor_angle(mlx->ray->ray_ngl - mlx->player->angle));
 	wall_h = (TILE_SIZE / mlx->ray->distance) * ((W_S / 2) / tan(mlx->player->fov_rd / 2));
+
 	f_pix = (H_S / 2) + (wall_h / 2);
 	c_pix = (H_S / 2) - (wall_h / 2);
 	if (f_pix > H_S)
@@ -84,3 +83,4 @@ void	render_wall(t_mlx *mlx, int ray)
 	draw_floor(mlx, ray, c_pix, f_pix);
 	draw_wall(mlx, ray, c_pix, f_pix);
 }
+
