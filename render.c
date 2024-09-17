@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 16:28:11 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/16 12:39:08 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:29:44 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,7 +21,6 @@ void	put_pixel(t_mlx *mlx, int x, int y, int color)
 	if (y < 0 || y >= H_S)
 		return ;
 	dest = (char *)mlx->image->addr + (y * mlx->image->lenght_line + x * (mlx->image->bit_per_pixel / 8));
-	// mlx_pixel_put(mlx->mlx, mlx->win, x, y, color);
 	*(unsigned int *)dest = color;
 }
 
@@ -42,17 +41,19 @@ int	get_texture(t_mlx *mlx, int flag) //pour le moment je balance que des couleu
 	mlx->ray->ray_ngl = nor_angle(mlx->ray->ray_ngl);
 	if (flag == 0)
 	{
-		if (mlx->ray->ray_ngl <= 3 * (M_PI / 2) && mlx->ray->ray_ngl >= M_PI / 2)
-			return (0xADD8E6); //bleu clair
-		else
-			return (0x0000CD); //bleu moyen
+		if (mlx->ray->ray_ngl > M_PI / 2 && mlx->ray->ray_ngl < 3 * (M_PI / 2))
+			return (0xADD8E6); //bleu clair west
+		else{
+			printf ("c le mur est ici \n");
+			return (0x98FB98); //vert pâle est
+		}
 	}
 	else
 	{
-		if (mlx->ray->ray_ngl <  M_PI && mlx->ray->ray_ngl > 0)
-			return (0x00008B); // bleu foncé
+		if (mlx->ray->ray_ngl > 0 && mlx->ray->ray_ngl < M_PI)
+			return (0x00008B); // bleu foncé sud
 		else
-			return (0x87CEEB); // bleu ciel
+			return (0xFFA07A); // orange clair nord
 	}
 }
 
@@ -61,6 +62,7 @@ void	draw_wall(t_mlx *mlx, int ray, int c_pix, int f_pix)
 	int color;
 
 	color = get_texture(mlx, mlx->ray->wall_flag);
+	printf("Ray: %d, c_pix: %d, f_pix: %d, Couleur: %06X\n", ray, c_pix, f_pix, color);
 	while (c_pix < f_pix)
 		put_pixel(mlx, ray, c_pix++, color);
 }

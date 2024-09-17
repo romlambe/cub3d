@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 15:31:43 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/16 12:45:04 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:23:00 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,11 +18,15 @@ int	unit_circle(float angle, char c)
 	{
 		if (angle > 0 && angle < M_PI)
 			return (1);
+		else
+			return (0);
 	}
 	else if (c == 'y')
 	{
 		if (angle > (M_PI / 2) && angle < (3 * M_PI) / 2)
 			return (1);
+		else
+			return (0);
 	}
 	return (0);
 }
@@ -117,9 +121,9 @@ float	get_vertical_inter(t_mlx *mlx, float angle)
 }
 float	nor_angle(float angle)
 {
-	if (angle < 0)
+	while (angle < 0)
 		angle += (M_PI * 2);
-	else if (angle > (2 * M_PI))
+	while (angle > (2 * M_PI))
 		angle -= (M_PI * 2);
 	return (angle);
 }
@@ -132,7 +136,7 @@ void	cast_ray(t_mlx *mlx)
 	int		ray;
 
 	ray = 0;
-	mlx->ray->ray_ngl = mlx->player->angle - (mlx->player->fov_rd / 2);
+	mlx->ray->ray_ngl = nor_angle(mlx->player->angle - (mlx->player->fov_rd / 2));
 	while (ray < W_S)
 	{
 		mlx->ray->wall_flag = 0;

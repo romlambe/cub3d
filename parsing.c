@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:15 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/15 15:29:24 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/16 16:30:34 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -213,7 +213,6 @@ int main(int ac, char **av) {
 		printf("%s\n", data->map[i]);
 	printf("p_x: %d\np_y: %d\nname: %s\n", data->p_x, data->p_y, data->name);
 
-	start_the_game(data);
 	if (check_char(data) == 0)
 		printf("pb\n");
 
@@ -222,7 +221,10 @@ int main(int ac, char **av) {
 		printf("La carte est fermée.\n");
 	} else {
 		printf("La carte n'est pas fermée.\n");
+		return 0;
 	}
+	start_the_game(data);
+
 
 	return 0;
 }

@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/16 12:48:55 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/17 15:11:00 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,8 +24,15 @@
 # define W_S 1000
 # define TILE_SIZE 30
 # define ROTATION_SPEED 0.045
-# define PLAYER_SPEED 4
-# define FOV 60
+# define PLAYER_SPEED 2
+# define FOV 90
+
+# define KEY_Z 122
+# define KEY_Q 113
+# define KEY_S 115
+# define KEY_D 100
+# define LEFT 65361
+# define RIGHT 65363
 
 typedef struct	s_player
 {
@@ -116,6 +123,14 @@ void	draw_floor(t_mlx *mlx, int ray, int c_pix, int f_pix);
 int		get_texture(t_mlx *mlx, int flag);
 void	draw_wall(t_mlx *mlx, int ray, int f_pix, int c_pix);
 void	render_wall(t_mlx *mlx, int ray);
+
+//Movement//
+int	ft_reles(int keycode, t_mlx *mlx);
+int	keypress(int keycode, void *ml);
+void	rotation_player(t_mlx *mlx, int i);
+void	move_player(t_mlx *mlx, double move_x, double move_y);
+void	hook(t_mlx *mlx, double move_x, double move_y);
+
 
 #endif
 
