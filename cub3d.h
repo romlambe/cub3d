@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/17 15:11:00 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/09/17 18:15:29 by anporced         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,22 +36,28 @@
 
 typedef struct	s_player
 {
-	int	x_ply;
-	int	y_ply;
+	double	x_ply;
+	double	y_ply;
+	double	dir_x;
+	double	dir_y;
+	double	plane_x;
+	double	plane_y;
 	double	angle;
-	float	fov_rd;
+	double	fov_rd;
 	int		rot;
 	int		l_r;
 	int		u_d;
-}				t_player;
+}			t_player;
 
 typedef struct	s_ray
 {
 	double	ray_ngl;
 	double	distance;
 	int		wall_flag;
+	double	ray_dir_x; // Ajouter cette ligne
+	double	ray_dir_y; // Ajouter cette ligne
+}			t_ray;
 
-}				t_ray;
 
 typedef struct	s_data
 {
@@ -120,7 +126,7 @@ int		unit_circle(float angle, char c);
 //Render//
 void	put_pixel(t_mlx *mlx, int x, int y, int color);
 void	draw_floor(t_mlx *mlx, int ray, int c_pix, int f_pix);
-int		get_texture(t_mlx *mlx, int flag);
+int		get_texture(t_mlx *mlx);
 void	draw_wall(t_mlx *mlx, int ray, int f_pix, int c_pix);
 void	render_wall(t_mlx *mlx, int ray);
 
