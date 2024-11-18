@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   render.c                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/15 16:28:11 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/17 18:14:13 by anporced         ###   ########.fr       */
+/*   Updated: 2024/09/18 09:57:25 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -61,7 +61,7 @@ void	draw_wall(t_mlx *mlx, int ray, int c_pix, int f_pix)
 	int color;
 
 	color = get_texture(mlx);
-	printf("Ray: %d, c_pix: %d, f_pix: %d, Couleur: %06X\n", ray, c_pix, f_pix, color);
+	// printf("Ray: %d, c_pix: %d, f_pix: %d, Couleur: %06X\n", ray, c_pix, f_pix, color);
 	while (c_pix < f_pix)
 		put_pixel(mlx, ray, c_pix++, color);
 }

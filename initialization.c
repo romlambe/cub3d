@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialization.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 12:04:49 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/17 18:14:38 by anporced         ###   ########.fr       */
+/*   Updated: 2024/09/18 15:44:48 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,7 +17,6 @@ void	start_the_game(t_data *data)
 	t_mlx	mlx;
 
 	mlx.data = data;
-	// mlx.win = NULL;
 	mlx.player = ft_calloc(1, sizeof(t_player));
 	mlx.ray = ft_calloc(1, sizeof(t_ray));
 
@@ -34,16 +33,11 @@ void	start_the_game(t_data *data)
 	if (!mlx.image->img)
 		return ;
 
-	mlx.image->addr = mlx_get_data_addr(mlx.image->img, &mlx.image->bit_per_pixel, &mlx.image->lenght_line, &mlx.image->endian);
-	// put_pixel(&mlx.image, x, y, color);
-	// mlx_put_image_to_window(mlx.mlx, mlx.win, mlx.image->img, 0, 0);
-	// mlx_destroy_image(mlx.mlx, mlx.image->img);
-	// mlx.win = mlx_new_window(mlx.mlx, W_S, H_S, "Cube3D");
-	// mlx.img = mlx_new_image(mlx.mlx, W_S, H_S);
+	mlx.image->addr = mlx_get_data_addr(mlx.image->img,
+		&mlx.image->bit_per_pixel, &mlx.image->lenght_line, &mlx.image->endian);
 	mlx_hook(mlx.win, 3, 1L << 1, &ft_reles, &mlx);
 	mlx_hook(mlx.win, 2, 1L << 0, &keypress, &mlx);
 	mlx_loop_hook(mlx.mlx, &game_loop, &mlx);
-	// mlx_key_hook(mlx.win, &mlx_key, &mlx);
 	mlx_loop(mlx.mlx);
 }
 
@@ -54,7 +48,6 @@ int	game_loop(void *ml)
 	mlx = ml;
 	// mlx_destroy_image(mlx->mlx, mlx->img);
 	// mlx->img = mlx_new_image(mlx->mlx, H_S, W_S);
-	//ft hook pour la rota du perso i guess
 	hook(mlx, 0,0);
 	cast_ray(mlx);
 	mlx_put_image_to_window(mlx->mlx, mlx->win, mlx->image->img, 0, 0);
