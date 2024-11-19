@@ -3,36 +3,50 @@
 /*                                                        :::      ::::::::   */
 /*   cub3d.h                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/17 18:15:29 by anporced         ###   ########.fr       */
+/*   Updated: 2024/11/19 05:47:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #ifndef CUB3D_H
 # define CUB3D_H
 
+# include <stdio.h>
 # include <stdlib.h>
 # include <string.h>
 # include <stdlib.h>
 # include <math.h>
 # include "minilibx-linux/mlx.h"
 # include "libft/libft.h"
+# include "gnl/get_next_line.h"
 
 # define H_S 500
 # define W_S 1000
 # define TILE_SIZE 30
-# define ROTATION_SPEED 0.045
-# define PLAYER_SPEED 2
+# define ROTATION_SPEED 0.02
+# define PLAYER_SPEED 0.5
 # define FOV 90
 
 # define KEY_Z 122
 # define KEY_Q 113
 # define KEY_S 115
 # define KEY_D 100
+# define KEY_W 119
+# define KEY_A 97
 # define LEFT 65361
 # define RIGHT 65363
+
+typedef struct s_texture {
+    void    *img;           // Pointeur vers l'image MLX
+    char    *addr;          // Adresse des données de l'image
+    int     width;          // Largeur de la texture
+    int     height;         // Hauteur de la texture
+    int     bpp;           // Bits par pixel
+    int     size_line;     // Taille de la ligne
+    int     endian;        // Endianness
+} t_texture;
 
 typedef struct	s_player
 {
@@ -58,18 +72,21 @@ typedef struct	s_ray
 	double	ray_dir_y; // Ajouter cette ligne
 }			t_ray;
 
-
 typedef struct	s_data
 {
-	char	**map;
-	int		p_x;
-	int		p_y;
-	int		w_size; //longueur map[i][j]
-	int		h_size; //largueur map[i]
-	char	*name;
-	int		max_len;
-	int		height;
-}t_data;
+    char **map;
+    int w_size;
+    int h_size;
+    int p_x;
+    int p_y;
+    char p_dir;
+    char *north_texture;
+    char *south_texture;
+    char *west_texture;
+    char *east_texture;
+    int floor_color[3];
+    int ceiling_color[3];
+}	t_data;
 
 typedef struct	s_image
 {
@@ -78,7 +95,6 @@ typedef struct	s_image
 	int		bit_per_pixel;
 	int		lenght_line;
 	int		endian;
-
 }				t_image;
 
 typedef struct	s_mlx
@@ -90,6 +106,7 @@ typedef struct	s_mlx
 	t_ray		*ray;
 	t_data		*data;
 	t_image		*image;
+	t_texture	*textures;
 }t_mlx;
 
 //Parsing//
@@ -111,8 +128,7 @@ int	search_player_pos(t_data *data);
 void	start_the_game(t_data *data);
 int	game_loop(void *ml);
 void	init_player(t_mlx *mlx);
-t_data	*init_argument(char **av);
-
+t_data *init_argument(char *filename);
 
 //Ray Casting//
 void	cast_ray(t_mlx *mlx);
@@ -137,6 +153,11 @@ void	rotation_player(t_mlx *mlx, int i);
 void	move_player(t_mlx *mlx, double move_x, double move_y);
 void	hook(t_mlx *mlx, double move_x, double move_y);
 
+
+void            init_textures(t_mlx *mlx);
+void            load_texture(t_mlx *mlx, char *path, t_texture *texture);
+unsigned int    get_pixel_from_texture(t_texture *texture, int x, int y);
+void            draw_textured_wall(t_mlx *mlx, int ray, int start, int end);
 
 #endif
 

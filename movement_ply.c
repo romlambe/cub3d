@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   movement_ply.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: anporced <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/17 13:19:51 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/17 18:09:37 by anporced         ###   ########.fr       */
+/*   Updated: 2024/11/19 05:47:27 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 int	ft_reles(int keycode, t_mlx *mlx)
 {
-	if (keycode == KEY_Q)
+	if (keycode == KEY_A)
 		mlx->player->l_r = 0;
 	else if (keycode == KEY_D)
 		mlx->player->l_r = 0;
-	else if (keycode == KEY_Z)
+	else if (keycode == KEY_W)
 		mlx->player->u_d = 0;
 	else if (keycode == KEY_S)
 		mlx->player->u_d = 0;
@@ -33,11 +33,11 @@ int	keypress(int keycode, void *ml)
 {
 	t_mlx *mlx = ml;
 
-	if (keycode == KEY_Q)
+	if (keycode == KEY_A)
 		mlx->player->l_r = -1;
 	else if (keycode == KEY_D)
 		mlx->player->l_r = 1;
-	else if (keycode == KEY_Z)
+	else if (keycode == KEY_W)
 		mlx->player->u_d = 1;
 	else if (keycode == KEY_S)
 		mlx->player->u_d = -1;

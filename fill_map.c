@@ -3,16 +3,14 @@
 /*                                                        :::      ::::::::   */
 /*   fill_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/13 11:26:40 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/13 12:04:36 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/11/19 05:47:23 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "cub3d.h"
-
-//à faire plus tard pour le moment on l'incluera à la mano
 
 void	empty_map(t_data *data, const char *file)
 {
