@@ -104,87 +104,87 @@ int	keypress(int keycode, void *ml)
 
 void    update_player_direction(t_player *player)
 {
-    player->dir_x = cos(player->angle);
-    player->dir_y = sin(player->angle);
-    player->plane_x = -player->dir_y * tan(player->fov_rd / 2);
-    player->plane_y = player->dir_x * tan(player->fov_rd / 2);
+	player->dir_x = cos(player->angle);
+	player->dir_y = sin(player->angle);
+	player->plane_x = -player->dir_y * tan(player->fov_rd / 2);
+	player->plane_y = player->dir_x * tan(player->fov_rd / 2);
 }
 
 
 void    rotation_player(t_mlx *mlx, int i)
 {
-    if (i == 1)
-    {
-        mlx->player->angle += ROTATION_SPEED;
-        if (mlx->player->angle > 2 * M_PI)
-            mlx->player->angle -= 2 * M_PI;
-    }
-    else
-    {
-        mlx->player->angle -= ROTATION_SPEED;
-        if (mlx->player->angle < 0)
-            mlx->player->angle += 2 * M_PI;
-    }
-    update_player_direction(mlx->player);
+	if (i == 1)
+	{
+		mlx->player->angle += ROTATION_SPEED;
+		if (mlx->player->angle > 2 * M_PI)
+			mlx->player->angle -= 2 * M_PI;
+	}
+	else
+	{
+		mlx->player->angle -= ROTATION_SPEED;
+		if (mlx->player->angle < 0)
+			mlx->player->angle += 2 * M_PI;
+	}
+	update_player_direction(mlx->player);
 }
 
 void    move_player(t_mlx *mlx, double move_x, double move_y)
 {
-    double  new_x;
-    double  new_y;
-    int     map_grid_x;
-    int     map_grid_y;
-    double  margin = 5.0; // Ajustez la marge selon vos besoins
+	double  new_x;
+	double  new_y;
+	int     map_grid_x;
+	int     map_grid_y;
+	double  margin = 5.0; // Ajustez la marge selon vos besoins
 
-    new_x = mlx->player->x_ply + move_x;
-    new_y = mlx->player->y_ply + move_y;
+	new_x = mlx->player->x_ply + move_x;
+	new_y = mlx->player->y_ply + move_y;
 
-    // Vérifier la collision pour la nouvelle position X
-    map_grid_x = (int)((new_x + margin * (move_x > 0 ? 1 : -1)) / TILE_SIZE);
-    map_grid_y = (int)(mlx->player->y_ply / TILE_SIZE);
-    if (mlx->data->map[map_grid_y][map_grid_x] != '1')
-        mlx->player->x_ply = new_x;
+	// Vérifier la collision pour la nouvelle position X
+	map_grid_x = (int)((new_x + margin * (move_x > 0 ? 1 : -1)) / TILE_SIZE);
+	map_grid_y = (int)(mlx->player->y_ply / TILE_SIZE);
+	if (mlx->data->map[map_grid_y][map_grid_x] != '1')
+		mlx->player->x_ply = new_x;
 
-    // Vérifier la collision pour la nouvelle position Y
-    map_grid_x = (int)(mlx->player->x_ply / TILE_SIZE);
-    map_grid_y = (int)((new_y + margin * (move_y > 0 ? 1 : -1)) / TILE_SIZE);
-    if (mlx->data->map[map_grid_y][map_grid_x] != '1')
-        mlx->player->y_ply = new_y;
+	// Vérifier la collision pour la nouvelle position Y
+	map_grid_x = (int)(mlx->player->x_ply / TILE_SIZE);
+	map_grid_y = (int)((new_y + margin * (move_y > 0 ? 1 : -1)) / TILE_SIZE);
+	if (mlx->data->map[map_grid_y][map_grid_x] != '1')
+		mlx->player->y_ply = new_y;
 }
 
 
 void    hook(t_mlx *mlx, double move_x, double move_y)
 {
-    if (mlx->player->rot == 1) // rotate right
-        rotation_player(mlx, 1);
-    if (mlx->player->rot == -1) // rotate left
-        rotation_player(mlx, 0);
+	if (mlx->player->rot == 1) // rotate right
+		rotation_player(mlx, 1);
+	if (mlx->player->rot == -1) // rotate left
+		rotation_player(mlx, 0);
 
-    double move_speed = PLAYER_SPEED;
-    move_x = 0;
-    move_y = 0;
+	double move_speed = PLAYER_SPEED;
+	move_x = 0;
+	move_y = 0;
 
-    if (mlx->player->u_d == 1) // move forward
-    {
-        move_x += mlx->player->dir_x * move_speed;
-        move_y += mlx->player->dir_y * move_speed;
-    }
-    if (mlx->player->u_d == -1) // move backward
-    {
-        move_x -= mlx->player->dir_x * move_speed;
-        move_y -= mlx->player->dir_y * move_speed;
-    }
-    if (mlx->player->l_r == 1) // move right (strafe)
-    {
-        move_x += mlx->player->plane_x * move_speed;
-        move_y += mlx->player->plane_y * move_speed;
-    }
-    if (mlx->player->l_r == -1) // move left (strafe)
-    {
-        move_x -= mlx->player->plane_x * move_speed;
-        move_y -= mlx->player->plane_y * move_speed;
-    }
-    move_player(mlx, move_x, move_y);
+	if (mlx->player->u_d == 1) // move forward
+	{
+		move_x += mlx->player->dir_x * move_speed;
+		move_y += mlx->player->dir_y * move_speed;
+	}
+	if (mlx->player->u_d == -1) // move backward
+	{
+		move_x -= mlx->player->dir_x * move_speed;
+		move_y -= mlx->player->dir_y * move_speed;
+	}
+	if (mlx->player->l_r == 1) // move right (strafe)
+	{
+		move_x += mlx->player->plane_x * move_speed;
+		move_y += mlx->player->plane_y * move_speed;
+	}
+	if (mlx->player->l_r == -1) // move left (strafe)
+	{
+		move_x -= mlx->player->plane_x * move_speed;
+		move_y -= mlx->player->plane_y * move_speed;
+	}
+	move_player(mlx, move_x, move_y);
 }
 
 int charset(char c)
@@ -466,330 +466,339 @@ void	draw_wall(t_mlx *mlx, int ray, int c_pix, int f_pix)
 
 unsigned int get_pixel_from_texture(t_texture *texture, int x, int y)
 {
-    if (x < 0 || y < 0 || x >= texture->width || y >= texture->height)
-        return (0);
-    
-    char *pixel = texture->addr + (y * texture->size_line + x * (texture->bpp / 8));
-    return (*(unsigned int *)pixel);
+	if (x < 0 || y < 0 || x >= texture->width || y >= texture->height)
+		return (0);
+	
+	char *pixel = texture->addr + (y * texture->size_line + x * (texture->bpp / 8));
+	return (*(unsigned int *)pixel);
 }
 
 void init_textures(t_mlx *mlx)
 {
-    mlx->textures = malloc(sizeof(t_texture) * 4);
-    if (!mlx->textures)
-        return;
-    
-    load_texture(mlx, mlx->data->north_texture, &mlx->textures[0]);  // North
-    load_texture(mlx, mlx->data->south_texture, &mlx->textures[1]);  // South
-    load_texture(mlx, mlx->data->west_texture, &mlx->textures[2]);   // West
-    load_texture(mlx, mlx->data->east_texture, &mlx->textures[3]);   // East
+	mlx->textures = malloc(sizeof(t_texture) * 4);
+	if (!mlx->textures)
+		return;
+	
+	load_texture(mlx, mlx->data->north_texture, &mlx->textures[0]);
+	load_texture(mlx, mlx->data->south_texture, &mlx->textures[1]);
+	load_texture(mlx, mlx->data->west_texture, &mlx->textures[2]);
+	load_texture(mlx, mlx->data->east_texture, &mlx->textures[3]);
 }
 
 void draw_textured_wall(t_mlx *mlx, int ray, int start, int end)
 {
-    // Calculer la hauteur exacte du mur
-    int line_height = end - start;
-    
-    // Calculer le point d'impact exact sur le mur
-    double wall_x;
-    if (mlx->ray->wall_flag == 0)
-        wall_x = mlx->player->y_ply + mlx->ray->distance * mlx->ray->ray_dir_y;
-    else
-        wall_x = mlx->player->x_ply + mlx->ray->distance * mlx->ray->ray_dir_x;
-    wall_x = fmod(wall_x, TILE_SIZE);
-    
-    // Sélectionner la texture appropriée
-    t_texture *current_texture;
-    if (mlx->ray->wall_flag == 0)
-    {
-        if (mlx->ray->ray_dir_x > 0)
-            current_texture = &mlx->textures[3];  // East
-        else
-            current_texture = &mlx->textures[2];  // West
-    }
-    else
-    {
-        if (mlx->ray->ray_dir_y > 0)
-            current_texture = &mlx->textures[1];  // South
-        else
-            current_texture = &mlx->textures[0];  // North
-    }
-    
-    // Convertir wall_x en coordonnée x de la texture
-    int tex_x = (int)(wall_x * current_texture->width / TILE_SIZE);
-    if ((mlx->ray->wall_flag == 0 && mlx->ray->ray_dir_x < 0) ||
-        (mlx->ray->wall_flag == 1 && mlx->ray->ray_dir_y < 0))
-        tex_x = current_texture->width - tex_x - 1;
-    
-    // Calculer le pas pour parcourir la texture verticalement
-    double step = (double)current_texture->height / line_height;
-    double tex_pos = (start - H_S / 2 + line_height / 2) * step;
-    
-    // Dessiner la ligne verticale pixel par pixel
-    for (int y = start; y < end; y++)
-    {
-        int tex_y = (int)tex_pos & (current_texture->height - 1);
-        tex_pos += step;
-        
-        unsigned int color = get_pixel_from_texture(current_texture, tex_x, tex_y);
-        put_pixel(mlx, ray, y, color);
-    }
+	int line_height = end - start;
+
+	double wall_x;
+	if (mlx->ray->wall_flag == 0)
+		wall_x = mlx->player->y_ply + mlx->ray->distance * mlx->ray->ray_dir_y;
+	else
+		wall_x = mlx->player->x_ply + mlx->ray->distance * mlx->ray->ray_dir_x;
+	wall_x = fmod(wall_x, TILE_SIZE);
+	
+	t_texture *current_texture;
+	if (mlx->ray->wall_flag == 0)
+	{
+		if (mlx->ray->ray_dir_x > 0)
+			current_texture = &mlx->textures[3];
+		else
+			current_texture = &mlx->textures[2];
+	}
+	else
+	{
+		if (mlx->ray->ray_dir_y > 0)
+			current_texture = &mlx->textures[1];
+		else
+			current_texture = &mlx->textures[0];
+	}
+	
+	int tex_x = (int)(wall_x * current_texture->width / TILE_SIZE);
+	if ((mlx->ray->wall_flag == 0 && mlx->ray->ray_dir_x < 0) ||
+		(mlx->ray->wall_flag == 1 && mlx->ray->ray_dir_y < 0))
+		tex_x = current_texture->width - tex_x - 1;
+	
+	double step = (double)current_texture->height / line_height;
+	double tex_pos = (start - H_S / 2 + line_height / 2) * step;
+
+	int y = start;
+	while (y < end)
+	{
+		int tex_y = (int)tex_pos & (current_texture->height - 1);
+		tex_pos += step;
+		unsigned int color = get_pixel_from_texture(current_texture, tex_x, tex_y);
+		put_pixel(mlx, ray, y, color);
+		y++;
+	}
 }
 
-// Modifier la fonction render_wall pour utiliser les textures
 void render_wall(t_mlx *mlx, int ray)
 {
-    double wall_h = (TILE_SIZE / mlx->ray->distance) * ((W_S / 2) / tan(mlx->player->fov_rd / 2));
-    
-    int start = (H_S / 2) - (wall_h / 2);
-    int end = (H_S / 2) + (wall_h / 2);
-    
-    if (end > H_S)
-        end = H_S - 1;
-    if (start < 0)
-        start = 0;
-    
-    // Dessiner le sol et le plafond
-    draw_floor(mlx, ray, start, end);
-    
-    // Dessiner le mur texturé
-    draw_textured_wall(mlx, ray, start, end);
+	double wall_h = (TILE_SIZE / mlx->ray->distance) * ((W_S / 2) / tan(mlx->player->fov_rd / 2));
+	
+	int start = (H_S / 2) - (wall_h / 2);
+	int end = (H_S / 2) + (wall_h / 2);
+	
+	if (end > H_S)
+		end = H_S - 1;
+	if (start < 0)
+		start = 0;
+	
+	draw_floor(mlx, ray, start, end);
+	
+	draw_textured_wall(mlx, ray, start, end);
 }
 
 
 void load_texture(t_mlx *mlx, char *path, t_texture *texture)
 {
-    texture->img = mlx_xpm_file_to_image(mlx->mlx, path, &texture->width, &texture->height);
-    if (!texture->img)
-    {
-        printf("Error loading texture: %s\n", path);
-        exit(1);
-    }
-    texture->addr = mlx_get_data_addr(texture->img, &texture->bpp, &texture->size_line, &texture->endian);
+	texture->img = mlx_xpm_file_to_image(mlx->mlx, path, &texture->width, &texture->height);
+	if (!texture->img)
+	{
+		printf("Error loading texture: %s\n", path);
+		exit(1);
+	}
+	texture->addr = mlx_get_data_addr(texture->img, &texture->bpp, &texture->size_line, &texture->endian);
 }
 
-int find_player_position(t_data *data) {
-    for (int i = 0; i < data->h_size; i++) {
-        for (int j = 0; j < data->w_size; j++) {
+int find_player_position(t_data *data)
+{
+    int i = 0;
+    while (i < data->h_size)
+	{
+        int j = 0;
+        while (j < data->w_size)
+		{
             char c = data->map[i][j];
-            if (c == 'N' || c == 'S' || c == 'E' || c == 'W') {
+            if (c == 'N' || c == 'S' || c == 'E' || c == 'W')
+			{
                 data->p_x = j;
                 data->p_y = i;
                 data->p_dir = c;
-                data->map[i][j] = '0'; // Remplacer la position par un espace
+                data->map[i][j] = '0';
                 return 1;
             }
+            j++;
         }
+        i++;
     }
-    return 0; // Pas de joueur trouvé
+    return 0;
 }
 
-int check_map_closed(t_data *data) {
-    // Vérifier les murs en haut, en bas et sur les bords
-    for (int i = 0; i < data->w_size; i++) {
-        if (data->map[0][i] != '1' || data->map[data->h_size - 1][i] != '1') {
-            return 1; // La carte n'est pas fermée
+int check_map_closed(t_data *data)
+{
+    int i = 0;
+
+    while (i < data->w_size)
+	{
+        if (data->map[0][i] != '1' || data->map[data->h_size - 1][i] != '1')
+		{
+            return 1;
         }
+        i++;
     }
 
-    for (int i = 0; i < data->h_size; i++) {
-        if (data->map[i][0] != '1' || data->map[i][data->w_size - 1] != '1') {
-            return 1; // La carte n'est pas fermée
+    i = 0;
+
+    while (i < data->h_size)
+	{
+        if (data->map[i][0] != '1' || data->map[i][data->w_size - 1] != '1')
+		{
+            return 1;
         }
+        i++;
     }
 
-    return 0; // La carte est fermée
+    return 0;
 }
+
 
 
 t_data *init_argument(char *filename)
 {
-    t_data *data = malloc(sizeof(t_data));
-    if (!data)
-    {
-        perror("Erreur d'allocation mémoire pour data");
-        return NULL;
-    }
-    int fd = open(filename, O_RDONLY);
-    if (fd == -1)
-    {
-        perror("Erreur lors de l'ouverture du fichier");
-        free(data);
-        return NULL;
-    }
-    char **map = NULL;
-    int map_size = 0;
-    char *line;
-    while ((line = get_next_line(fd)))
-    {
-        map = realloc(map, sizeof(char *) * (map_size + 1));
-        if (!map)
-        {
-            perror("Erreur d'allocation mémoire pour la map");
-            free(data);
-            close(fd);
-            return NULL;
-        }
-        map[map_size++] = line;
-    }
-    close(fd);
-    map = realloc(map, sizeof(char *) * (map_size + 1));
-    map[map_size] = NULL;
-    data->map = map;
-    data->w_size = find_max_len(map);
-    data->h_size = map_size;
+	t_data *data = malloc(sizeof(t_data));
+	if (!data)
+	{
+		perror("Erreur d'allocation mémoire pour data");
+		return NULL;
+	}
+	int fd = open(filename, O_RDONLY);
+	if (fd == -1)
+	{
+		perror("Erreur lors de l'ouverture du fichier");
+		free(data);
+		return NULL;
+	}
+	char **map = NULL;
+	int map_size = 0;
+	char *line;
+	while ((line = get_next_line(fd)))
+	{
+		map = realloc(map, sizeof(char *) * (map_size + 1));
+		if (!map)
+		{
+			perror("Erreur d'allocation mémoire pour la map");
+			free(data);
+			close(fd);
+			return NULL;
+		}
+		map[map_size++] = line;
+	}
+	close(fd);
+	map = realloc(map, sizeof(char *) * (map_size + 1));
+	map[map_size] = NULL;
+	data->map = map;
+	data->w_size = find_max_len(map);
+	data->h_size = map_size;
 
-    return data;
+	return data;
 }
 
-void skip_empty_lines(FILE *file) {
-    char buffer[1024];
-    while (fgets(buffer, sizeof(buffer), file)) {
-        if (buffer[0] != '\n') {
-            fseek(file, -strlen(buffer), SEEK_CUR); // Revenir à la ligne lue si elle n'est pas vide
-            break;
-        }
-    }
+void skip_empty_lines(FILE *file)
+{
+	char buffer[1024];
+	while (fgets(buffer, sizeof(buffer), file))
+	{
+		if (buffer[0] != '\n')
+		{
+			fseek(file, -strlen(buffer), SEEK_CUR);
+			break;
+		}
+	}
 }
 
-// Fonction pour lire la couleur d'un élément (F ou C)
-int read_color(char *line, int *color) {
-    // Expects format F/R,G,B or C/R,G,B
-    char *ptr = strchr(line, ' ');
-    if (ptr == NULL) return 0; // Mauvais format
-    ptr++; // Déplacer vers la première valeur après l'espace
-    sscanf(ptr, "%d,%d,%d", &color[0], &color[1], &color[2]);
-    return 1;
+int read_color(char *line, int *color)
+{
+	char *ptr = strchr(line, ' ');
+	if (ptr == NULL) return 0;
+	ptr++;
+	sscanf(ptr, "%d,%d,%d", &color[0], &color[1], &color[2]);
+	return 1;
 }
 
-// Fonction pour lire un chemin de texture
-int read_texture(char *line, char **texture_path) {
-    char *ptr = strchr(line, ' ');
-    if (ptr == NULL) return 0;
-    
-    // Ignorer les espaces supplémentaires
-    while (*ptr == ' ') ptr++;
-    
-    // Supprimer le retour à la ligne éventuel
-    char *newline = strchr(ptr, '\n');
-    if (newline) *newline = '\0';
-    
-    // Supprimer les espaces à la fin
-    char *end = ptr + strlen(ptr) - 1;
-    while (end > ptr && (*end == ' ' || *end == '\n' || *end == '\r'))
-        *end-- = '\0';
-    
-    *texture_path = strdup(ptr);
-    return 1;
+int read_texture(char *line, char **texture_path)
+{
+	char *ptr = strchr(line, ' ');
+	if (ptr == NULL) return 0;
+	
+	while (*ptr == ' ') ptr++;
+	
+	char *newline = strchr(ptr, '\n');
+	if (newline) *newline = '\0';
+	
+	char *end = ptr + strlen(ptr) - 1;
+	while (end > ptr && (*end == ' ' || *end == '\n' || *end == '\r'))
+		*end-- = '\0';
+	
+	*texture_path = strdup(ptr);
+	return 1;
 }
 
-// Fonction pour lire les textures et couleurs depuis le fichier .cub
-int read_scene_elements(FILE *file, t_data *data) {
-    char line[1024];
-    skip_empty_lines(file);
-    
-    while (fgets(line, sizeof(line), file)) {
-        if (line[0] == '\0' || line[0] == '\n')
-            continue;
+int read_scene_elements(FILE *file, t_data *data)
+{
+	char line[1024];
+	skip_empty_lines(file);
+	
+	while (fgets(line, sizeof(line), file))
+	{
+		if (line[0] == '\0' || line[0] == '\n')
+			continue;
 
-        // Lire les textures et couleurs
-        if (strncmp(line, "NO", 2) == 0)
-            read_texture(line, &data->north_texture);
-        else if (strncmp(line, "SO", 2) == 0)
-            read_texture(line, &data->south_texture);
-        else if (strncmp(line, "WE", 2) == 0)
-            read_texture(line, &data->west_texture);
-        else if (strncmp(line, "EA", 2) == 0)
-            read_texture(line, &data->east_texture);
-        else if (strncmp(line, "F", 1) == 0)
-            read_color(line, data->floor_color);
-        else if (strncmp(line, "C", 1) == 0)
-            read_color(line, data->ceiling_color);
-        else
-            break; // C'est la fin des éléments de la scène
-    }
+		if (strncmp(line, "NO", 2) == 0)
+			read_texture(line, &data->north_texture);
+		else if (strncmp(line, "SO", 2) == 0)
+			read_texture(line, &data->south_texture);
+		else if (strncmp(line, "WE", 2) == 0)
+			read_texture(line, &data->west_texture);
+		else if (strncmp(line, "EA", 2) == 0)
+			read_texture(line, &data->east_texture);
+		else if (strncmp(line, "F", 1) == 0)
+			read_color(line, data->floor_color);
+		else if (strncmp(line, "C", 1) == 0)
+			read_color(line, data->ceiling_color);
+		else
+			break;
+	}
 
-    return 1;
+	return 1;
 }
 
-int read_map(FILE *file, t_data *data) {
-    char line[1024];
-    char **map = NULL;
-    int map_size = 0;
+int read_map(FILE *file, t_data *data)
+{
+	char line[1024];
+	char **map = NULL;
+	int map_size = 0;
 
-    skip_empty_lines(file);
+	skip_empty_lines(file);
 
-    while (fgets(line, sizeof(line), file)) {
-        if (line[0] == '\0' || line[0] == '\n')
-            continue;
-        
-        // Ajouter la ligne à la carte
-        map = realloc(map, sizeof(char *) * (map_size + 1));
-        if (!map) return 0; // Erreur de mémoire
-        map[map_size++] = strdup(line);
-    }
-    
-    // Terminer la carte avec un NULL
-    map = realloc(map, sizeof(char *) * (map_size + 1));
-    map[map_size] = NULL;
+	while (fgets(line, sizeof(line), file))
+	{
+		if (line[0] == '\0' || line[0] == '\n')
+			continue;
+		
+		map = realloc(map, sizeof(char *) * (map_size + 1));
+		if (!map) return 0;
+		map[map_size++] = strdup(line);
+	}
+	
+	map = realloc(map, sizeof(char *) * (map_size + 1));
+	map[map_size] = NULL;
 
-    data->map = map;
-    data->h_size = map_size;
-    data->w_size = strlen(map[0]);
+	data->map = map;
+	data->h_size = map_size;
+	data->w_size = strlen(map[0]);
 
-    return 1;
+	return 1;
 }
 
-#include <stdio.h>
+int main(int argc, char **argv)
+{
+	if (argc != 2)
+	{
+		printf("Usage: %s <fichier.cub>\n", argv[0]);
+		return 1;
+	}
 
-int main(int argc, char **argv) {
-    if (argc != 2) {
-        printf("Usage: %s <fichier.cub>\n", argv[0]);
-        return 1;
-    }
+	FILE *file = fopen(argv[1], "r");
+	if (!file)
+	{
+		perror("Erreur d'ouverture du fichier");
+		return 1;
+	}
 
-    FILE *file = fopen(argv[1], "r");
-    if (!file) {
-        perror("Erreur d'ouverture du fichier");
-        return 1;
-    }
+	t_data data = {0};
 
-    t_data data = {0};
+	if (!read_scene_elements(file, &data))
+	{
+		printf("Erreur dans la lecture des éléments de la scène\n");
+		fclose(file);
+		return 1;
+	}
 
-    // Lire les éléments de la scène
-    if (!read_scene_elements(file, &data)) {
-        printf("Erreur dans la lecture des éléments de la scène\n");
-        fclose(file);
-        return 1;
-    }
+	if (!read_map(file, &data))
+	{
+		printf("Erreur dans la lecture de la carte\n");
+		fclose(file);
+		return 1;
+	}
 
-    // Lire la carte
-    if (!read_map(file, &data)) {
-        printf("Erreur dans la lecture de la carte\n");
-        fclose(file);
-        return 1;
-    }
+	if (!check_map_closed(&data))
+	{
+		printf("La carte n'est pas fermée\n");
+		fclose(file);
+		return 1;
+	}
 
-    // Vérification de la validité de la carte
-    if (!check_map_closed(&data)) {
-        printf("La carte n'est pas fermée\n");
-        fclose(file);
-        return 1;
-    }
+	if (!find_player_position(&data))
+	{
+		printf("Position du joueur introuvable\n");
+		fclose(file);
+		return 1;
+	}
 
-    // Trouver la position du joueur
-    if (!find_player_position(&data)) {
-        printf("Position du joueur introuvable\n");
-        fclose(file);
-        return 1;
-    }
+	printf("Carte valide ! Position du joueur : (%d, %d), orientation : %c\n", data.p_x, data.p_y, data.p_dir);
 
-    // Affichage des informations
-    printf("Carte valide ! Position du joueur : (%d, %d), orientation : %c\n", data.p_x, data.p_y, data.p_dir);
+	start_the_game(&data);
 
-    start_the_game(&data);
-
-    // Nettoyage et fermeture du fichier après l'exécution du jeu
-    fclose(file);
-    return 0;
+	fclose(file);
+	return 0;
 }
