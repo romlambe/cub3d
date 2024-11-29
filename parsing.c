@@ -3,229 +3,158 @@
 /*                                                        :::      ::::::::   */
 /*   parsing.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: tgerardi <tgerardi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/09/11 15:15:15 by romlambe          #+#    #+#             */
-/*   Updated: 2024/11/19 05:47:28 by marvin           ###   ########.fr       */
+/*   Created: 2024/11/25 12:33:42 by tgerardi          #+#    #+#             */
+/*   Updated: 2024/11/29 16:36:24 by tgerardi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-// testing char of the map
-
 #include "cub3d.h"
 
-int charset(char c)
+void read_file(const char *filename, t_data *data)
 {
-	if (c == '0' || c == '1' || c == ' ')
-		return (1);
-	if (c == 'S' || c == 'N' || c == 'E' || c == 'W')
-		return (2);
-	return (0);
+	int fd = open(filename, O_RDONLY);
+	if (fd < 0)
+	{
+		perror("Erreur ouverture fichier");
+		return (NULL);
+	}
+	char **lines = NULL;
+	char *line = NULL;
+	int line_count = 0;
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		char **temp = realloc(lines, (line_count + 1) * sizeof(char *));
+		if (!temp)
+		{
+			perror("Erreur allocation mémoire");
+			free(line);
+			break;
+		}
+		lines = temp;
+		lines[line_count++] = line;
+	}
+	char **final = realloc(lines, (line_count + 1) * sizeof(char *));
+	if (final)
+	{
+		lines = final;
+		lines[line_count] = NULL;
+	}
+	close(fd);
+	data->file_content = lines;
 }
 
-int	check_char(t_data *data)
+void read_textures(char **file_content, t_data *data)
 {
-	int i;
-	int j;
-	int count;
+	if (!file_content || !data)
+		return;
+	if (file_content[0])
+		data->north_texture = strdup(file_content[0] + 3);
+	if (file_content[1])
+		data->south_texture = strdup(file_content[1] + 3);
+	if (file_content[2])
+		data->west_texture = strdup(file_content[2] + 3);
+	if (file_content[3])
+		data->east_texture = strdup(file_content[3] + 3);
+	if (!data->north_texture || !data->south_texture ||
+		!data->west_texture || !data->east_texture)
+	{
+		perror("Erreur allocation mémoire pour une ou plusieurs textures");
+		free(data->north_texture);
+		free(data->south_texture);
+		free(data->west_texture);
+		free(data->east_texture);
+		return;
+	}
+}
 
-	i = 0;
-	count = 0;
-	while (data->map[i])
+void parse_color(const char *line, int *color)
+{
+	int i = 0, j = 0;
+	char buffer[4];
+	while (*line && i < 3)
 	{
 		j = 0;
-		while (data->map[i][j])
+		while (*line && *line != ',' && j < 3)
 		{
-			if (charset(data->map[i][j]) == 1)
-				;
-			else if (charset(data->map[i][j]) == 2)
-				count++;
-			else
-				return (0);
-			j++;
+			buffer[j++] = *line++;
 		}
+		buffer[j] = '\0';
+		color[i++] = atoi(buffer);
+		if (*line == ',')
+			line++;
+	}
+}
+
+void read_color_fc(char **file_content, t_data *data)
+{
+	if (file_content[4])
+	{
+		parse_color(file_content[4] + 2, data->floor_color);
+	}
+
+	if (file_content[5])
+	{
+		parse_color(file_content[5] + 2, data->ceiling_color);
+	}
+}
+
+void read_map(char **file_content, t_data *data)
+{
+	int i = 7;
+	int map_lines = 0;
+	while (file_content[i])
+	{
+		map_lines++;
 		i++;
 	}
-	if (count != 1)
-		return (0);
-	return (1);
+	data->h_size = map_lines;
+	data->map = (char **)malloc((map_lines + 1) * sizeof(char *));
+	if (!data->map)
+		return;
+	i = 7;
+	int j = 0;
+	while (file_content[i])
+	{
+		data->map[j] = strdup(file_content[i]);
+		i++;
+		j++;
+	}
+	data->map[j] = NULL;
 }
 
-int available_name(t_data *data)
-{
-	int start_pos;
-	int size_cub;
-	int size_string;
-
-	size_cub = ft_strlen(".cub");
-	size_string = ft_strlen(data->name);
-	start_pos = size_string - size_cub;
-	if (start_pos <= 0 || ft_strcmp(data->name + start_pos, ".cub"))
-		return (0);
-	return (1);
-}
-int is_wall_or_space(char c) {
-	return (c == '1' || c == ' ' || c == '\0');
-}
-
-void free_map(char **map, int height)
+void width_map(char **map, t_data *data)
 {
 	int i;
+	int len;
+	int max;
 
 	i = 0;
-	while (i < height)
-		free(map[i++]);
-	free(map);
-}
-
-char **copy_map(char **map, int height)
-{
-	char	**copy;
-	int		i;
-
-	i = 0;
-	copy = malloc(sizeof(char *) * (height + 1));
-	if (!copy)
-		return (printf("Can't copy the map"), NULL);
-	while (i < height)
-	{
-		copy[i] = ft_strdup(map[i]);
-		if (!copy[i])
-		{
-			free_map(map, height);
-			return (NULL);
-		}
-		i++;
-	}
-	copy[height] = NULL;
-	return (copy);
-}
-
-
-int flood_fill(char **map, int x, int y, int max_len, int height)
-{
-	if (x < 0 || y < 0 || y >= height || x >= max_len || map[y][x] == '\0')
-		return (0);
-	if (is_wall_or_space(map[y][x]))
-		return (1);
-	map[y][x] = ' ';
-	if (!flood_fill(map, x + 1, y, max_len, height)
-		|| !flood_fill(map, x - 1, y, max_len, height)
-		|| !flood_fill(map, x, y - 1, max_len, height)
-		|| !flood_fill(map, x, y + 1, max_len, height))
-		return (0);
-	return (1);
-}
-
-
-int	find_max_len(char **map)
-{
-	int	i;
-	int	max_len;
-	int	len;
-
-	i = 0;
-	max_len = 0;
+	len = 0;
+	max = 0;
 	while (map[i])
 	{
-		len = ft_strlen(map[i]);
-		if (len > max_len)
-			max_len = len;
+		len = strlen(map[i]);
+		if (len > max)
+			max = len;
 		i++;
 	}
-	return (max_len);
+	data->w_size = max;
 }
 
-
-int	find_map_height(char **map)
+void init_map(const char *filename, t_data *data)
 {
-	int	i;
-
-	i = 0;
-	while (map[i])
-		i++;
-	return (i);
-}
-
-int	is_map_closed(char **map)
-{
-	int	max_len;
-	int	height;
-	char **map_copy;
-	int	x;
-	int	y;
-
-	max_len = find_max_len(map);
-	height = find_map_height(map);
-	map_copy = copy_map(map, height);
-	if (!map_copy)
-		return (printf("Error copy map"), 0);
-	y = -1;
-	while (++y < height)
+	if (!filename || !data)
+		return;
+	read_file(filename, data);
+	if (!data->file_content)
 	{
-		x = -1;
-		while (++x < max_len)
-		{
-			if (map[y][x] == '0')
-			{
-				if (!flood_fill(map_copy, x, y, max_len, height))
-					return(free_map(map_copy, height), 0);
-			}
-		}
+		perror("Erreur lors de la lecture du fichier");
+		return;
 	}
-	return (free_map(map_copy, height), 1);
+	read_textures(data->file_content, data);
+	read_color_fc(data->file_content, data);
+	read_map(data->file_content, data);
+	width_map(data->map, data);
 }
-
-int	search_player_pos(t_data *data)
-{
-	int	i;
-	int	j;
-
-	i = 0;
-	while (data->map[i])
-	{
-		j = 0;
-		while(data->map[i][j])
-		{
-			if (data->map[i][j] == 'E' || data->map[i][j] == 'S'
-				|| data->map[i][j] == 'N' || data->map[i][j] == 'W')
-			{
-			data->p_x = j;
-			data->p_y = i;
-			return (0);
-			}
-			j++;
-		}
-		i++;
-	}
-	return (1);
-}
-
-int main(int ac, char **av) {
-
-	t_data *data;
-	
-	(void)ac;
-	data = init_argument(av);
-	if (search_player_pos(data) == 1)
-		return 1;
-	for (int i = 0; i < data->h_size; i++)
-		printf("%s\n", data->map[i]);
-	printf("p_x: %d\np_y: %d\nname: %s\n", data->p_x, data->p_y, data->name);
-
-	if (check_char(data) == 0)
-		printf("pb\n");
-
-	// // Tester si la carte est fermée
-	if (is_map_closed(data->map)) {
-		printf("La carte est fermée.\n");
-	} else {
-		printf("La carte n'est pas fermée.\n");
-		return 0;
-	}
-	start_the_game(data);
-
-
-	return 0;
-}
-

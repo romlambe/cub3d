@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
+#    By: tgerardi <tgerardi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/04 15:52:08 by romlambe          #+#    #+#              #
-#    Updated: 2024/11/19 05:47:27 by marvin           ###   ########.fr        #
+#    Updated: 2024/11/29 16:43:31 by tgerardi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -15,7 +15,7 @@ NAME = cub3d
 CC = gcc
 CFLAGS = -Wall -Wextra -Werror
 
-SRC = 2_complet.c # parsing.c initialization.c raycasting.c render.c movement_ply.c
+SRC = parsing.c main.c
 LIBFT = libft/libft.a
 MINILIBX = minilibx-linux/libmlx.a
 GNL = gnl/get_next_line.c gnl/get_next_line_utils.c
