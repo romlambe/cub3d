@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/03 10:15:17 by romlamb           #+#    #+#             */
-/*   Updated: 2023/10/18 09:12:12 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:22:04 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,17 @@ char	*ft_strchr(const char *big, int c)
 		return ((char *)big);
 	else
 		return (NULL);
+}
+
+int	ft_strchr_i(char *str, char c)
+{
+	int	i;
+
+	i = 0;
+	while (str[i++])
+		if (str[i] == c)
+			return(i);
+	return (i);
 }
 
 /*#include <stdio.h>

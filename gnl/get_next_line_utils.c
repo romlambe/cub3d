@@ -6,13 +6,13 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 12:21:47 by romlambe          #+#    #+#             */
-/*   Updated: 2023/10/23 16:35:44 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/02 16:27:50 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-int	ft_strlen(char *str)
+int	ft_strlen_gnl(char *str)
 {
 	int	i;
 
@@ -22,17 +22,17 @@ int	ft_strlen(char *str)
 	return (i);
 }
 
-char	*ft_strjoin(char *s1, char *s2)
+char	*ft_strjoin_gnl(char *s1, char *s2)
 {
 	size_t	i;
 	int		len;
 	char	*array;
 
 	i = 0;
-	len = ft_strlen(s2);
+	len = ft_strlen_gnl(s2);
 	if (!s1)
 		return (ft_strndup(s2, len));
-	len = len + ft_strlen(s1);
+	len = len + ft_strlen_gnl(s1);
 	array = (char *)malloc(sizeof(char) * (len + 1));
 	if (!array)
 		return (NULL);
@@ -47,7 +47,7 @@ char	*ft_strjoin(char *s1, char *s2)
 	return (array);
 }
 
-int	ft_strchr(char *str)
+int	ft_strchr_gnl(char *str)
 {
 	int	i;
 
@@ -100,7 +100,19 @@ char	*to_write(char **stack)
 	if (temp[i] == '\n')
 		i++;
 	dest = ft_strndup(temp, i);
-	*stack = ft_strndup(temp + i, ft_strlen(temp + i));
+	*stack = ft_strndup(temp + i, ft_strlen_gnl(temp + i));
 	free(temp);
 	return (dest);
+}
+
+void free_gnl(int fd)
+{
+	char *line;
+
+	line = get_next_line(fd);
+	while (line)
+	{
+		free(line);
+		line = get_next_line(fd);
+	}
 }

@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 09:47:37 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/11 17:06:20 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/03 13:22:21 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,5 +66,8 @@ char	*ft_strtrim(char const *s1, char const *set);
 char	*ft_substr(char const *s, unsigned int start, size_t len);
 int		ft_tolower(int c);
 int		ft_toupper(int c);
+char	*ft_strncpy(char *copy, size_t size);
+int		ft_strchr_i(char *str, char c);
+
 
 #endif

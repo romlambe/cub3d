@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:15 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/16 16:30:34 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/03 14:46:04 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,10 +82,8 @@ char **copy_map(char **map, int height)
 {
 	char	**copy;
 	int		i;
-	int		j;
 
 	i = 0;
-	j = 0;
 	copy = malloc(sizeof(char *) * (height + 1));
 	if (!copy)
 		return (printf("Can't copy the map"), NULL);
@@ -149,6 +147,8 @@ int	find_map_height(char **map)
 	return (i);
 }
 
+
+
 int	is_map_closed(char **map)
 {
 	int	max_len;
@@ -206,6 +206,8 @@ int	search_player_pos(t_data *data)
 int main(int ac, char **av) {
 
 	t_data *data;
+
+	(void)ac;
 	data = init_argument(av);
 	if (search_player_pos(data) == 1)
 		return 1;

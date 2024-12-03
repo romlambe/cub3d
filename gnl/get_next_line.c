@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 12:13:47 by romlambe          #+#    #+#             */
-/*   Updated: 2024/09/13 11:24:23 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/11/19 03:15:55 by marvin           ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,8 +28,8 @@ char	*get_next_line(int fd)
 	{
 		valread = read(fd, buffer, BUFFER_SIZE);
 		buffer[valread] = '\0';
-		stack = ft_strjoin(stack, buffer);
-		if (ft_strchr(stack))
+		stack = ft_strjoin_gnl(stack, buffer);
+		if (ft_strchr_gnl(stack))
 			break ;
 	}
 	free (buffer);

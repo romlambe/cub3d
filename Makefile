@@ -3,65 +3,68 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: romlambe <marvin@42.fr>                    +#+  +:+       +#+         #
+#    By: marvin <marvin@student.42.fr>              +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/04 15:52:08 by romlambe          #+#    #+#              #
-#    Updated: 2024/09/17 13:42:59 by romlambe         ###   ########.fr        #
+#    Updated: 2024/11/19 05:47:27 by marvin           ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME = cub3d
-AUTHOR = romlambe
 
 CC = gcc
+CFLAGS = -Wall -Wextra -Werror
 
-
-SRC = parsing.c initialization.c raycasting.c render.c movement_ply.c
+SRC = 2_complet.c # parsing.c initialization.c raycasting.c render.c movement_ply.c
 LIBFT = libft/libft.a
 MINILIBX = minilibx-linux/libmlx.a
 GNL = gnl/get_next_line.c gnl/get_next_line_utils.c
 
 LIBRARY = -L/usr/X11R6/lib -lX11 -lXext
-OBJ = $(SRC:.c=.o)
-GNL_OBJ = $(GNL:.c=.o)
+OBJ = $(addprefix compile/, $(SRC:.c=.o))
+GNL_OBJ = $(addprefix compile/, $(GNL:.c=.o))
 
-GREEN = \033[0;32m
-NC = \033[0m
+HEADER = cub3d.h
 
-all: intro $(NAME)
+# Animation et couleur
+RESET = \033[0m
+GREEN = \033[32m
+BLUE = \033[34m
 
-intro:
-	echo "\n==================================="
-	echo "Compiling:	$(NAME)"
-	echo "Author:		$(AUTHOR)"
-	echo "==================================="
+all: banner $(NAME)
+
+banner:
+	@echo "$(BLUE)Compiling cub3d by tgerardi and a little bit of romlambe...$(RESET)"
 
 $(LIBFT):
-	make -C libft
+	@$(MAKE) -C libft > /dev/null
 
 $(MINILIBX):
-	make -C minilibx-linux
+	@$(MAKE) -C minilibx-linux > /dev/null || true
 
 $(NAME): $(OBJ) $(LIBFT) $(MINILIBX) $(GNL_OBJ)
-	$(CC) $(CFLAGS) $(OBJ) $(MINILIBX) $(LIBRARY) $(LIBFT) $(GNL_OBJ) -o $(NAME) -lm
-	echo "\n$(GREEN)Cub3D is created.$(NC)\n"
+	@echo "$(GREEN)Linking $(NAME)...$(RESET)"
+	@$(CC) $(CFLAGS) $(OBJ) $(MINILIBX) $(LIBRARY) $(LIBFT) $(GNL_OBJ) -o $(NAME) -lm
 
-%.o: %.c
+compile/%.o: %.c $(HEADER) | compile_dirs
+	@echo -n "Compiling $< ... "
 	@$(CC) $(CFLAGS) -c $< -o $@
+	@echo "$(GREEN)Done$(RESET)"
+
+compile_dirs:
+	@mkdir -p compile compile/gnl
 
 clean:
-	echo "$(GREEN)Cub3D: Cleaning object files..."
-	rm -rf $(OBJ)
-	rm -rf $(GNL_OBJ)
-	make clean -C libft
-	make clean -C minilibx-linux
+	@rm -rf compile
+	@$(MAKE) clean -C libft > /dev/null
+	@$(MAKE) clean -C minilibx-linux > /dev/null || true
+	@echo "$(BLUE)Cleaned up!$(RESET)"
 
 fclean: clean
-	echo "$(GREEN)Cub3D: Cleaning all build files..."
-	rm -f $(NAME)
-	make clean -C libft
-	make clean -C minilibx
+	@rm -f $(NAME)
+	@$(MAKE) fclean -C libft > /dev/null
+	@echo "$(BLUE)Full cleanup done!$(RESET)"
 
 re: fclean all
 
-.PHONY: all clean fclean re
+.PHONY: all clean fclean re banner compile_dirs
