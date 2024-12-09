@@ -896,9 +896,9 @@ int	count_sprite(char **map)
 	x = 0;
 	y = 0;
 	count = 0;
-	while (map[y][0] != -2)
+	while (map[y])
 	{
-		while(map[y][x] != -2)
+		while(map[y][x])
 		{
 			if (map[y][x] == '5')
 				count++;
@@ -926,9 +926,9 @@ void	get_sprite(t_data *data)
 	i = 0;
 	data->n_sprites = count_sprite(data->map);
 	data->sprites = malloc(sizeof(t_sprite) * data->n_sprites);
-	while (data->map[++y][0] != -2)
+	while (data->map[++y])
 	{
-		while (data->map[y][++x] != -2)
+		while (data->map[y][++x])
 		{
 			if (is_sprite(data->map[y][x]))
 			{
