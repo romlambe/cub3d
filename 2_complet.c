@@ -275,7 +275,6 @@ void	draw_floor_ceilling(t_image *image, int x)
 	f_color = rgb(image->data->assets.f_color[0],
 			image->data->assets.f_color[1],
 			image->data->assets.f_color[2]);
-
 	y = - 1;
 	while (++y < image->data->win_height / 2)
 		draw_pixel(image, x, y, c_color);
@@ -324,7 +323,8 @@ void	draw_stripe(t_ray *ray, t_image *image, int x, t_player *player)
 	if (ray->side <= 1 && ray->ray_dir_y != 0)
 		stripe.tex_x = stripe.texture->height - stripe.tex_x - 1;
 	stripe.step = 1.0 * stripe.texture->height / stripe.line_height;
-	stripe.tex_pos = (stripe.start_y - stripe.h / 2 + stripe.line_height / 2) * stripe.step;
+	stripe.tex_pos = (stripe.start_y - stripe.h / 2 + stripe.line_height / 2)
+		* stripe.step;
 	draw_wall_stripe(&stripe, image, x);
 }
 
@@ -704,6 +704,14 @@ static int	manage_input_release(int keycode, t_data *data)
 
 // PARSING //
 
+// Si lettre dans rgb -> changement de couleur au lieu d'erreur
+// Si espace en trop -> segfault
+
+// int	color_check_error(t_data *data)
+// {
+
+// }
+
 int	copy_color(t_data *data, char **split_color, char *color)
 {
 	if (color[0] == 'F' && color[1] == '\0')
@@ -711,18 +719,23 @@ int	copy_color(t_data *data, char **split_color, char *color)
 		data->assets.f_color[0] = ft_atoi(split_color[0]);
 		data->assets.f_color[1] = ft_atoi(split_color[1]);
 		data->assets.f_color[2] = ft_atoi(split_color[2]);
+		printf("%d\n", data->assets.f_color[0]);
+		printf("%d\n", data->assets.f_color[1]);
+		printf("%d\n", data->assets.f_color[2]);
+		if (!data->assets.f_color[0] || !data->assets.f_color[1] || !data->assets.f_color[2])
+			return (1);
 		if (is_color_is_correct(data->assets.f_color[0],
 				data->assets.f_color[1], data->assets.f_color[2]) == 1)
-			return(printf("Error: ceilling color error\n"), 1);
+			return(1);
 	}
-	else if (color[0] ==  'C' && color[1] == '\0')
+	else if (color[0] == 'C' && color[1] == '\0')
 	{
 		data->assets.c_color[0] = ft_atoi(split_color[0]);
 		data->assets.c_color[1] = ft_atoi(split_color[1]);
 		data->assets.c_color[2] = ft_atoi(split_color[2]);
 		if (is_color_is_correct(data->assets.f_color[0],
 				data->assets.f_color[1], data->assets.f_color[2]) == 1)
-			return (printf("Error:  floor color error\n"),1);
+			return (printf("Error: Floor color error\n"),1);
 	}
 	else
 		return (1);
@@ -1031,6 +1044,14 @@ int	parsing_map_assets(t_data *data, int fd)
 	return (check_assets(data, fd));
 }
 
+//ft pour trim les spaces
+// ft pour voir si fichier vide ou map vide
+
+// char **trim_color(char **split_color)
+// {
+
+// }
+
 int	parsing_map_colors(t_data *data, int fd)
 {
 	char	*line;
@@ -1048,14 +1069,9 @@ int	parsing_map_colors(t_data *data, int fd)
 		if (skip_line(line) == 1)
 			continue ;
 		split_line = ft_split(line, ' ');
+		printf("%s\n", split_line[2]);
 		free(line);
 		split_color = ft_split(split_line[1], ',');
-		// printf("%s\n", split_line[0]);
-		// printf("%s\n", split_line[1]);
-		// printf("%s\n", split_color[0]);
-		// printf("%s\n", split_color[1]);
-		// printf("%s\n", split_color[2]);
-
 		if (copy_color(data, split_color, split_line[0]) == 1)
 			return (1);
 		free_tab(split_line);
@@ -1126,10 +1142,9 @@ int parsing_map(t_data *data, int fd, char *filename)
 			else
 				return (free_gnl(fd), 1);
 		}
-		// get_map_dimensions(data, line);
 		free(line);
 		i++;
-	}// faire une ft pour savoir si map acceptable ou non
+	}
 	allocate_map(data, data->map_width, data->map_height);
 	printf("h:%d\n", data->map_height);
 	printf("w:%d\n", data->map_width);
@@ -1137,8 +1152,6 @@ int parsing_map(t_data *data, int fd, char *filename)
 
 	for (int i = 0; i < 10; i++)
 		printf("%s", data->map[i]);
-	// if (data->player.x_ply < 0)
-	// 	return (1);
 	return (0);
 }
 // int parsing_map(t_data *data, int fd)
@@ -1177,16 +1190,14 @@ int	parser(t_data *data, char **av)
 
 	fd = open(av[1], O_RDONLY);
 	if (fd == -1)
-		return (printf("Error: map cant be open"), 1);
+		return (printf("Error: Can't open the map\n"), 1);
 	if (parsing_map_assets(data, fd) == 1)
-		return 1;
+		return (printf("Error: Assets isn't correctly set up\n"), 1);
 	if (parsing_map_colors(data, fd) == 1)
-		return 1;
+		return (printf("Error: Colors isn't correctly set up\n"), 1);
 	if (parsing_map(data, fd, av[1]) == 1)
-		return 1;
-	// return (get_sprite(data), close(fd), 0);
-	return 0;
-	// return (printf("Error: Parsing incorrect"), 1);
+		return (printf("Error: Map isn't correctly set up\n"), 1);
+	return (0);
 }
 void	free_data(t_data *data)
 {
@@ -1261,34 +1272,31 @@ int flood_fill(char **map, int x, int y, int max_len, int height)
 
 
 
-// int	is_map_closed(t_data *data)
-// {
-// 	int	max_len;
-// 	int	height;
-// 	char **map_copy;
-// 	int	x;
-// 	int	y;
+int	is_map_closed(t_data *data)
+{
+	char **map_copy;
+	int	x;
+	int	y;
 
-// 	max_len = find_max_len(data->map);
-// 	height = find_max_height(data->map);
-// 	map_copy = copy_map_flood(data->map, height);
-// 	if (!map_copy)
-// 		return (printf("Error copy map"), 0);
-// 	y = -1;
-// 	while (++y < height)
-// 	{
-// 		x = -1;
-// 		while (++x < max_len)
-// 		{
-// 			if (data->map[y][x] == '0')
-// 			{
-// 				if (!flood_fill(map_copy, x, y, max_len, height))
-// 					return(free_map(map_copy, height), 0);
-// 			}
-// 		}
-// 	}
-// 	return (free_map(map_copy, height), 1);
-// }
+
+	map_copy = copy_map_flood(data->map, data->map_height);
+	if (!map_copy)
+		return (printf("Error copy map"), 0);
+	y = -1;
+	while (++y < data->map_height)
+	{
+		x = -1;
+		while (++x < data->map_width)
+		{
+			if (data->map[y][x] == '0')
+			{
+				if (!flood_fill(map_copy, x, y, data->map_width, data->map_height))
+					return(printf("Error: Map is not closed\n"),free_map(map_copy, data->map_height), 1);
+			}
+		}
+	}
+	return (free_map(map_copy, data->map_height), 0);
+}
 
 int available_name(char *name)
 {
@@ -1314,7 +1322,7 @@ int	main(int ac, char **av)
 	if (available_name(av[1]) == 1)
 		return (printf("Error: Invalid file type\n"), 1);
 	init_data(&data);
-	if (parser(&data, av) == 1){
+	if (parser(&data, av) == 1 || is_map_closed(&data) == 1){
 		return (free_data(&data), 1);
 	}
 	data.mlx_win = mlx_new_window(data.mlx, data.win_width, data.win_height, "CUB3 PAR ROMAIN");
