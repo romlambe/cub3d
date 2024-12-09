@@ -64,7 +64,7 @@ static void	set_player_direction(t_player *player, char direction)
 
 void	init_player(t_data *data, char direction, int y, int x)
 {
-	data->map[y][x] = 0;
+	data->map[y][x] = '0';
 	data->player.x_ply = (float)x + 0.5f;
 	data->player.y_ply = (float)y + 0.5f;
 	data->player.move_x = 0;
@@ -84,6 +84,7 @@ void	manage_strafe_movement(char **map, t_player *player, int move, double dt)
 		if (map[pos_y][(int)(player->x_ply + player->plane_x * PLAYER_SPEED * dt)] != '1')
 			player->x_ply += player->plane_x * PLAYER_SPEED * dt;
 		if (map[(int)(player->y_ply + player->plane_y * PLAYER_SPEED * dt)][pos_x] != '1')
+
 			player->y_ply += player->plane_y * PLAYER_SPEED * dt;
 	}
 	if (move == 1)
@@ -540,6 +541,7 @@ void	calc_perp_wall_dist(t_ray *ray, t_data *data)
 
 void	get_texture(t_data *data, char *path, t_image *texture)
 {
+	printf("%s\n", path);
 	texture->img = mlx_xpm_file_to_image(data->mlx, path, &(texture->width), &(texture->height));
 	if (!texture->img)
 		return ;
@@ -666,13 +668,13 @@ static int	manage_input_press(int keycode, t_data *data)
 	// if (keycode == 65307)
 	// 	close_window(data);
 	if (keycode == KEY_W)
-		data->player.move_y = 1;
-	if (keycode == KEY_S)
 		data->player.move_y = -1;
+	if (keycode == KEY_S)
+		data->player.move_y = 1;
 	if (keycode == KEY_A)
 		data->player.move_x = -1;
 	if (keycode == KEY_D)
-		data->player.move_y = 1;
+		data->player.move_x = 1;
 	if (keycode == LEFT)
 		manage_left_camera_mov(&(data->player), data->deltatime);
 	if (keycode == RIGHT)
@@ -727,51 +729,130 @@ int	copy_color(t_data *data, char **split_color, char *color)
 	return (0);
 }
 
-// char **copy_map_flood(char **map, int height)
-// {
-// 	char	**copy;
-// 	int		i;
-
-// 	i = 0;
-// 	copy = malloc(sizeof(char *) * (height + 1));
-// 	if (!copy)
-// 		return (printf("Can't copy the map"), NULL);
-// 	while (i < height)
-// 	{
-// 		copy[i] = ft_strdup(map[i]);
-// 		if (!copy[i])
-// 		{
-// 			free_map(map, height);
-// 			return (NULL);
-// 		}
-// 		i++;
-// 	}
-// 	copy[height] = NULL;
-// 	return (copy);
-// }
-
-int	copy_map(t_data *data, int i, char *line)
+void free_tab(char **tab)
 {
-	int	j;
+	int	i;
 
-	j = 0;
-	while (line[j + 1])
+	if (!tab)
+		return ;
+	i = 0;
+	while (tab[i++])
+		free(tab[i]);
+	free(tab);
+}
+
+int	allocate_map(t_data *data, int rows, int columns)
+{
+	int	i;
+
+	i = 0;
+	data->map = malloc(sizeof(char *) * (rows + 1));
+	if (!data->map)
+		return (printf("Error: memories\n"),1);
+	while (i < rows)
 	{
-		if (((line[j] - '0') >= 0 && (line[j] - '0') <= '1'))
-			data->map[i][j] = line[j] - '0';
-		else if(line[j] == 'N' || line[j] == 'S'
-			|| line[j] == 'E' || line[j] == 'W')
-			init_player(data, line[j], i, j);
-		else if (line[j] == ' ')
-			data->map[i][j] = '5';
-		else
-			return (1);
-		data->map[i + 1][j] = '5';
-		j++;
+		data->map[i] = malloc(sizeof(char) * (columns + 1));
+		if (!data->map[i])
+			return (printf("Error: memories columns\n"),1);
+		// free_tab(data->map);
+		i++;
 	}
-	data->map[i][j] = '6';
+	data->map[rows] = 0;
 	return (0);
 }
+
+int	search_player_pos(t_data *data)
+{
+	int	i;
+	int j;
+
+	i = 0;
+	while(data->map[i])
+	{
+		j = 0;
+		while(data->map[i][j])
+		{
+			if (data->map[i][j] == 'N' || data->map[i][j] == 'E'
+				|| data->map[i][j] == 'W' || data->map[i][j] == 'S')
+			{
+				init_player(data, data->map[i][j], j, i);
+				return(0);
+			}
+			j++;
+		}
+		i++;
+	}
+	return (1);
+}
+
+int	copy_map(t_data *data, char *filename)
+{
+	int		fd;
+	char	*line;
+	int	i;
+
+	i = 0;
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		return (-1);
+	while ((line = get_next_line(fd)))
+	{
+		if (*line == '0' || *line == '1'){
+			data->map[i] = ft_strdup(line);
+			i++;
+		}
+		free(line);
+	}
+	if (search_player_pos(data) != 0)
+		return (printf("Error: player position not found\n"), 1);
+	return (0);
+}
+
+// int	copy_map(t_data *data, int i, char *line)
+// {
+// 	int	j;
+
+// 	j = 0;
+// 	while(line[j])
+// 	{
+// 		if (line[j] == '0' || line[j] == '1')
+// 			data->map[i][j] = line[j];
+// 		else if (line[j] == 'N' || line[j] == 'S'
+// 			|| line[j] == 'E' || line[j] == 'W')
+// 			init_player(data, line[j], i, j);
+// 		else if (line[j] == ' ')
+// 			data->map[i][j] = '0';
+// 		else
+// 			return (1);
+// 		data->map[i + 1][j] = '0';
+// 		j++;
+// 	}
+// 	data->map[i][j] = '\0';
+// 	return (0);
+// }
+
+// int	copy_map(t_data *data, int i, char *line)
+// {
+// 	int	j;
+
+// 	j = 0;
+// 	while (line[j + 1])
+// 	{
+// 		if (((line[j] - '0') >= 0 && (line[j] - '0') <= '1'))
+// 			data->map[i][j] = line[j] - '0';
+// 		else if(line[j] == 'N' || line[j] == 'S'
+// 			|| line[j] == 'E' || line[j] == 'W')
+// 			init_player(data, line[j], i, j);
+// 		else if (line[j] == ' ')
+// 			data->map[i][j] = '5';
+// 		else
+// 			return (1);
+// 		data->map[i + 1][j] = '5';
+// 		j++;
+// 	}
+// 	data->map[i][j] = '6';
+// 	return (0);
+// }
 
 int	copy_assets(t_data *data, char **split_line)
 {
@@ -780,18 +861,21 @@ int	copy_assets(t_data *data, char **split_line)
 	if (!split_line[1])
 		return (1);
 	texture_path = ft_strncpy(split_line[1], ft_strchr_i(split_line[1], '\n'));
-	if (ft_strcmp(split_line[0], "NO"))
+	if (!texture_path)
+		return (printf("Error: Failed to extract texture path\n"), 1);
+	if (ft_strcmp(split_line[0], "NO") == 0)
 		get_texture(data, texture_path, &(data->assets.n_texture));
-	else if (ft_strcmp(split_line[0], "SO"))
+	else if (ft_strcmp(split_line[0], "SO") == 0)
 		get_texture(data, texture_path, &(data->assets.s_texture));
-	else if (ft_strcmp(split_line[0], "WE"))
+	else if (ft_strcmp(split_line[0], "WE") == 0)
 		get_texture(data, texture_path, &(data->assets.w_texture));
-	else if (ft_strcmp(split_line[0], "EA"))
+	else if (ft_strcmp(split_line[0], "EA") == 0)
 		get_texture(data, texture_path, &(data->assets.e_texture));
 	else
 		return (free(texture_path), printf("Error: Incorret texture path\n"), 1);
 	return (free(texture_path), 0);
 }
+
 
 int	check_assets(t_data *data, int fd)
 {
@@ -858,17 +942,17 @@ void	get_sprite(t_data *data)
 	}
 }
 
-void	free_tab(char **tab)
-{
-	int	i;
-	i = 0;
+// void	free_tab(char **tab)
+// {
+// 	int	i;
+// 	i = 0;
 
-	if (!tab)
-		return ;
-	while (tab[i])
-		free(tab[i++]);
-	free(tab);
-}
+// 	if (!tab)
+// 		return ;
+// 	while (tab[i])
+// 		free(tab[i++]);
+// 	free(tab);
+// }
 
 int	skip_line(char *line)
 {
@@ -935,8 +1019,8 @@ int	parsing_map_assets(t_data *data, int fd)
 		if (skip_line(line) == 1)
 			continue ;
 		line_split = ft_split(line, ' ');
-		printf("%s\n",line_split[0]);
-		printf("%s\n",line_split[1]);
+		// printf("%s\n",line_split[0]);
+		// printf("%s\n",line_split[1]);
 
 		free (line);
 		if (copy_assets(data, line_split) == 1)
@@ -954,6 +1038,7 @@ int	parsing_map_colors(t_data *data, int fd)
 	char	**split_color;
 	int		i;
 
+	(void)data;
 	i = 2;
 	while (i)
 	{
@@ -965,8 +1050,14 @@ int	parsing_map_colors(t_data *data, int fd)
 		split_line = ft_split(line, ' ');
 		free(line);
 		split_color = ft_split(split_line[1], ',');
+		// printf("%s\n", split_line[0]);
+		// printf("%s\n", split_line[1]);
+		// printf("%s\n", split_color[0]);
+		// printf("%s\n", split_color[1]);
+		// printf("%s\n", split_color[2]);
+
 		if (copy_color(data, split_color, split_line[0]) == 1)
-			return (free_gnl(fd), free_tab(split_line), free_tab(split_color), 1);
+			return (1);
 		free_tab(split_line);
 		free_tab(split_color);
 		i--;
@@ -974,12 +1065,55 @@ int	parsing_map_colors(t_data *data, int fd)
 	return (0);
 }
 
-int parsing_map(t_data *data, int fd)
+int	find_max_len(int fd)
+{
+	int		len;
+	int		max_len;
+	char	*line;
+
+	max_len = 0;
+	while ((line = get_next_line(fd)))
+	{
+		len = ft_strlen(line);
+		if (len > max_len)
+			max_len = len;
+		free(line);
+	}
+	return (max_len);
+}
+
+
+int	find_max_height(char *filename)
+{
+	int	line_count;
+	int fd;
+	char *line;
+
+	fd = open(filename, O_RDONLY);
+	line_count = 0;
+	line = get_next_line(fd);
+	if (fd == -1)
+		return (-1);
+	while((line = get_next_line(fd)))
+	{
+		if (*line && (*line == '1' || *line == '0' || *line == '\t' || *line == ' '))
+			{
+				line_count++;
+				// printf("%s", line);
+			}
+		free (line);
+	}
+	return (close(fd), line_count);
+}
+
+int parsing_map(t_data *data, int fd, char *filename)
 {
 	char	*line;
 	int		i;
 
 	i = 0;
+	data->map_width = find_max_len(fd);
+	data->map_height = find_max_height(filename);
 	while(i)
 	{
 		line = get_next_line(fd);
@@ -992,16 +1126,50 @@ int parsing_map(t_data *data, int fd)
 			else
 				return (free_gnl(fd), 1);
 		}
-		if (copy_map(data, i, line) == 1)
-			return(free(line), free_gnl(fd), 1);
+		// get_map_dimensions(data, line);
 		free(line);
 		i++;
-	}
-	data->map[i][0] = -2;
-	if (data->player.x_ply < 0)
-		return (1);
+	}// faire une ft pour savoir si map acceptable ou non
+	allocate_map(data, data->map_width, data->map_height);
+	printf("h:%d\n", data->map_height);
+	printf("w:%d\n", data->map_width);
+	copy_map(data, filename);
+
+	for (int i = 0; i < 10; i++)
+		printf("%s", data->map[i]);
+	// if (data->player.x_ply < 0)
+	// 	return (1);
 	return (0);
 }
+// int parsing_map(t_data *data, int fd)
+// {
+// 	char	*line;
+// 	int		i;
+
+// 	i = 0;
+// 	while(i)
+// 	{
+// 		line = get_next_line(fd);
+// 		if (!line)
+// 			break;
+// 		if (skip_line(line) == 1)
+// 		{
+// 			if (i == 0)
+// 				continue ;
+// 			else
+// 				return (free_gnl(fd), 1);
+// 		}
+// 		if (copy_map(data, i, line) == 1)
+// 			return(free(line), free_gnl(fd), 1);
+// 		free(line);
+// 		i++;
+// 	}
+
+// 	data->map[i][0] = -2;
+// 	if (data->player.x_ply < 0)
+// 		return (1);
+// 	return (0);
+// }
 
 int	parser(t_data *data, char **av)
 {
@@ -1010,11 +1178,15 @@ int	parser(t_data *data, char **av)
 	fd = open(av[1], O_RDONLY);
 	if (fd == -1)
 		return (printf("Error: map cant be open"), 1);
-	if (parsing_map_assets(data, fd) == 0)
-		if (parsing_map_colors(data, fd) == 0)
-			if (parsing_map(data, fd) == 0)
-				return (get_sprite(data), close(fd), 0);
-	return (printf("Error: Parsing incorrect"), 1);
+	if (parsing_map_assets(data, fd) == 1)
+		return 1;
+	if (parsing_map_colors(data, fd) == 1)
+		return 1;
+	if (parsing_map(data, fd, av[1]) == 1)
+		return 1;
+	// return (get_sprite(data), close(fd), 0);
+	return 0;
+	// return (printf("Error: Parsing incorrect"), 1);
 }
 void	free_data(t_data *data)
 {
@@ -1087,61 +1259,36 @@ int flood_fill(char **map, int x, int y, int max_len, int height)
 	return (1);
 }
 
-int	find_max_len(char **map)
-{
-	int	i;
-	int	len;
-	int	max_len;
 
-	i = 0;
-	max_len = 0;
-	while (map[i++])
-	{
-		len = ft_strlen(map[i]);
-		if (len > max_len)
-			max_len = 0;
-	}
-	return (max_len);
-}
 
-int	find_max_height(char **map)
-{
-	int	i;
+// int	is_map_closed(t_data *data)
+// {
+// 	int	max_len;
+// 	int	height;
+// 	char **map_copy;
+// 	int	x;
+// 	int	y;
 
-	i = 0;
-	while (map[i])
-		i++;
-	return (i);
-}
-
-int	is_map_closed(t_data *data)
-{
-	int	max_len;
-	int	height;
-	char **map_copy;
-	int	x;
-	int	y;
-
-	max_len = find_max_len(data->map);
-	height = find_max_height(data->map);
-	map_copy = copy_map_flood(data->map, height);
-	if (!map_copy)
-		return (printf("Error copy map"), 0);
-	y = -1;
-	while (++y < height)
-	{
-		x = -1;
-		while (++x < max_len)
-		{
-			if (data->map[y][x] == '0')
-			{
-				if (!flood_fill(map_copy, x, y, max_len, height))
-					return(free_map(map_copy, height), 0);
-			}
-		}
-	}
-	return (free_map(map_copy, height), 1);
-}
+// 	max_len = find_max_len(data->map);
+// 	height = find_max_height(data->map);
+// 	map_copy = copy_map_flood(data->map, height);
+// 	if (!map_copy)
+// 		return (printf("Error copy map"), 0);
+// 	y = -1;
+// 	while (++y < height)
+// 	{
+// 		x = -1;
+// 		while (++x < max_len)
+// 		{
+// 			if (data->map[y][x] == '0')
+// 			{
+// 				if (!flood_fill(map_copy, x, y, max_len, height))
+// 					return(free_map(map_copy, height), 0);
+// 			}
+// 		}
+// 	}
+// 	return (free_map(map_copy, height), 1);
+// }
 
 int available_name(char *name)
 {
@@ -1167,17 +1314,11 @@ int	main(int ac, char **av)
 	if (available_name(av[1]) == 1)
 		return (printf("Error: Invalid file type\n"), 1);
 	init_data(&data);
-	if (parser(&data, av) || is_map_closed(&data)){
+	if (parser(&data, av) == 1){
 		return (free_data(&data), 1);
 	}
-
 	data.mlx_win = mlx_new_window(data.mlx, data.win_width, data.win_height, "CUB3 PAR ROMAIN");
-	get_texture(&data, "./textures/north.texture.xpm", &(data.assets.n_texture));
-	get_texture(&data, "./textures/south.texture.xpm", &(data.assets.s_texture));
-	get_texture(&data, "./textures/east.texture.xpm", &(data.assets.e_texture));
-	get_texture(&data, "./textures/west.texture.xpm", &(data.assets.w_texture));
-
-	printf("%s\n", data.assets.n_texture.addr);
+	// printf("cc\n");
 	mlx_do_key_autorepeatoff(data.mlx);
 	mlx_hook(data.mlx_win, 2, 1L << 0, manage_input_press, &data);
 	mlx_hook(data.mlx_win, 3, 1L << 1, manage_input_release, &data);

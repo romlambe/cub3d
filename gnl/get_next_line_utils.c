@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 12:21:47 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/02 16:27:50 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/04 12:18:25 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,7 +112,8 @@ void free_gnl(int fd)
 	line = get_next_line(fd);
 	while (line)
 	{
-		free(line);
+		if (line)
+			free(line);
 		line = get_next_line(fd);
 	}
 }

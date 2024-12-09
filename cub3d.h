@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/03 15:59:27 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/09 09:38:28 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,8 +27,8 @@
 // # define H_S 500
 // # define W_S 1000
 # define TILE_SIZE 30
-# define ROTATION_SPEED 3.5
-# define PLAYER_SPEED 7.5
+# define ROTATION_SPEED 10
+# define PLAYER_SPEED 5
 # define FOV 60
 
 # define KEY_Z 122
@@ -132,6 +132,8 @@ typedef struct	s_data
 	long long	old_fps;
 	double		deltatime;
 	char		file_content;
+	int		map_height; //columns
+	int		map_width; //line
 
 
     // int p_x;
@@ -229,7 +231,7 @@ int is_wall_or_space(char c);
 void free_map(char **map, int height);
 // char **copy_map(char **map, int height);
 int flood_fill(char **map, int x, int y, int max_len, int height);
-int	find_max_len(char **map);
+// int	find_max_len(char **map);
 int	find_map_height(char **map);
 // int	is_map_closed(char **map);
 int	search_player_pos(t_data *data);
