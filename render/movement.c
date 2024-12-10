@@ -1,4 +1,16 @@
-#include "cub3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   movement.c                                         :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/10 10:05:01 by romlambe          #+#    #+#             */
+/*   Updated: 2024/12/10 15:17:32 by romlambe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../cub3d.h"
 
 int	search_player_pos(t_data *data)
 {
@@ -24,7 +36,7 @@ int	search_player_pos(t_data *data)
 	return (1);
 }
 
-static void	set_player_direction(t_player *player, char direction)
+void	set_player_direction(t_player *player, char direction)
 {
 	if (direction == 'N')
 		return (player->dir_x = 0.0f, player->dir_y = -1.0f,

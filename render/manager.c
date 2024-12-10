@@ -1,4 +1,16 @@
-#include "cub3d.h"
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   manager.c                                          :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/10 10:04:56 by romlambe          #+#    #+#             */
+/*   Updated: 2024/12/10 23:27:08 by romlambe         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
+#include "../cub3d.h"
 
 void	manage_left_camera_mov(t_player *player, double dt)
 {
@@ -40,9 +52,8 @@ void	manage_right_camera_mov(t_player *player, double dt)
 
 int	manage_input_press(int keycode, t_data *data)
 {
-	if (keycode == 65307)
-		//////////////// TODO: Exit properly window and clear ///////////////////////
-		exit(1);
+	if (keycode == KEY_ESC)
+		close_window(data);
 	if (keycode == KEY_W)
 		data->player.move_y = -1;
 	if (keycode == KEY_S)

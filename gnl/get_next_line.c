@@ -3,14 +3,27 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: marvin <marvin@student.42.fr>              +#+  +:+       +#+        */
+/*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/21 12:13:47 by romlambe          #+#    #+#             */
-/*   Updated: 2024/11/19 03:15:55 by marvin           ###   ########.fr       */
+/*   Updated: 2024/12/10 23:40:21 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+
+void	free_gnl(int fd)
+{
+	char	*line;
+
+	line = get_next_line(fd);
+	while (line)
+	{
+		if (line)
+			free(line);
+		line = get_next_line(fd);
+	}
+}
 
 char	*get_next_line(int fd)
 {
@@ -35,4 +48,3 @@ char	*get_next_line(int fd)
 	free (buffer);
 	return (to_write (&stack));
 }
-

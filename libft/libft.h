@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 09:47:37 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/03 17:11:53 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/10 23:38:44 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,6 +50,12 @@ void	ft_putendl_fd(char *str, int fd);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_putstr_fd(char *str, int fd);
 char	**ft_split(char const *s, char c);
+int		get_nb_parts(char *str, char c);
+char	**init_parts(char *str, char c);
+void	fill_part(char *str, char *part, int part_len, int *start);
+int		get_parts_size(char **parts);
+void	print_parts(char **parts);
+char	**free_parts(char **parts);
 char	*ft_strchr(const char *big, int c);
 int		ft_strcmp(const char *s1, const char *s2);
 char	*ft_strdup(char const *str);
@@ -68,6 +74,5 @@ int		ft_tolower(int c);
 int		ft_toupper(int c);
 char	*ft_strncpy(char *copy, size_t size);
 int		ft_strchr_i(char *str, char c);
-
 
 #endif
