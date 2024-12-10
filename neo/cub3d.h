@@ -198,88 +198,55 @@ typedef struct	s_ray
 	// float	distance;
 }			t_ray;
 
+int available_name(char *name);
+void	init_data(t_data *data);
+int	parser(t_data *data, char **av);
+int	is_map_closed(t_data *data);
+void	free_data(t_data *data);
 
+// DRAWER //
+void	draw_sprite_stripes(t_data *data, t_image *img, t_sprite_transform *transform, int sprite_index);
+void	draw_sprite_stripe(t_image *img, t_sprite_transform *transform, int sprite_index, int stripe);
+void	draw_stripe(t_ray *ray, t_image *image, int x, t_player *player);
+void	draw_wall_stripe(t_draw_wall *wall, t_image *img, int x);
+void	draw_floor_ceilling(t_image *image, int x);
 
-// typedef struct	s_image
-// {
-// 	void	*img;
-// 	char	*addr;
-// 	int		bit_per_pixel;
-// 	int		lenght_line;
-// 	int		endian;
-// }				t_image;
+// FRYER //
+void	free_map(char **map, int height);
+void	free_assets(t_data *data);
+void	free_data(t_data *data);
+void	free_tab(char **tab);
 
-// typedef struct	s_mlx
-// {
-// 	void		*mlx;
-// 	void		*win;
-// 	void		*img;
-// 	t_player	*player;
-// 	t_ray		*ray;
-// 	t_data		*data;
-// 	t_image		*image;
-// 	t_texture	*textures;
-// 	t_draw_wall *wall;
-// 	t_assets	assets;
-// }t_mlx;
+// INITIALISATION //
+void	init_player(t_data *data, char direction, int y, int x);
+void	init_assets(t_assets *assets);
+void	init_data(t_data *data);
 
-//Parsing//
-int charset(char c);
-int	check_char(t_data *data);
-// int available_name(t_data *data);
-int is_wall_or_space(char c);
-void free_map(char **map, int height);
-// char **copy_map(char **map, int height);
-int flood_fill(char **map, int x, int y, int max_len, int height);
-// int	find_max_len(char **map);
-int	find_map_height(char **map);
-// int	is_map_closed(char **map);
+// MANAGER //
+void	manage_right_camera_mov(t_player *player, double dt);
+void	manage_left_camera_mov(t_player *player, double dt);
+int	manage_input_release(int keycode, t_data *data);
+int	manage_input_press(int keycode, t_data *data);
+
+// MLX_UTILS //
+void	draw_pixel(t_image *img, int x, int y, int color);
+int	get_pixel_color(t_image *texture, int x, int y);
+int	is_color_is_correct(int r, int g, int b);
+int	rgba(int r, int g, int b, int a);
+int	rgb(int r, int g, int b);
+
+// MOVEMENT //
+void	manage_forward_movement(char **map, t_player *player, int move, double dt);
+void	manage_strafe_movement(char **map, t_player *player, int move, double dt);
+static void	set_player_direction(t_player *player, char direction);
 int	search_player_pos(t_data *data);
-
-
-
-//Initialisation//
-// void	start_the_game(t_data *data);
-// int	game_loop(void *ml);
-// void	init_player(t_mlx *mlx);
-// t_data *init_argument(char *filename);
-
-//Ray Casting//
-// void	cast_ray(t_mlx *mlx);
-// float	nor_angle(float angle);
-// float	get_vertical_inter(t_mlx *mlx, float angle);
-// float	get_horizontal_inter(t_mlx *mlx, float angle);
-// int		wall_hit(float x, float y, t_mlx *mlx);
-// int		inter_chek(float angle, float *inter, float *step, int is_horizon);
-// int		unit_circle(float angle, char c);
-
-//Render//
-// void	put_pixel(t_mlx *mlx, int x, int y, int color);
-// void	draw_floor(t_mlx *mlx, int ray, int c_pix, int f_pix);
-// int		get_texture(t_mlx *mlx);
-// void	draw_wall(t_mlx *mlx, int ray, int f_pix, int c_pix);
-// void	render_wall(t_mlx *mlx, int ray);
-
-//Movement//
-// int	ft_reles(int keycode, t_mlx *mlx);
-// int	keypress(int keycode, void *ml);
-// void	rotation_player(t_mlx *mlx, int i);
-// void	move_player(t_mlx *mlx, double move_x, double move_y);
-// void	hook(t_mlx *mlx, double move_x, double move_y);
-
-
-// void            init_textures(t_mlx *mlx);
-// void            load_texture(t_mlx *mlx, char *path, t_texture *texture);
-// unsigned int    get_pixel_from_texture(t_texture *texture, int x, int y);
-// void            draw_textured_wall(t_mlx *mlx, int ray, int start, int end);
+int	update_loop(t_data *data);
 
 #endif
 
-# ifdef __linux__
-#  include <X11/keysym.h>
-#  include <X11/X.h>
-# elif __APPLE__
-#  include <ApplicationServices/ApplicationServices.h>
-# endif
-
-
+// # ifdef __linux__
+// #  include <X11/keysym.h>
+// #  include <X11/X.h>
+// # elif __APPLE__
+// #  include <ApplicationServices/ApplicationServices.h>
+// # endif
