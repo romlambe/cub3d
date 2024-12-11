@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 10:04:56 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 23:27:08 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/11 09:39:58 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,9 +55,9 @@ int	manage_input_press(int keycode, t_data *data)
 	if (keycode == KEY_ESC)
 		close_window(data);
 	if (keycode == KEY_W)
-		data->player.move_y = -1;
-	if (keycode == KEY_S)
 		data->player.move_y = 1;
+	if (keycode == KEY_S)
+		data->player.move_y = -1;
 	if (keycode == KEY_A)
 		data->player.move_x = -1;
 	if (keycode == KEY_D)

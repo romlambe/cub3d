@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 10:05:01 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 15:17:32 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/11 09:49:47 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -99,7 +99,7 @@ void	manage_forward_movement(
 
 	pos_x = (int)player->x_ply;
 	pos_y = (int)player->y_ply;
-	if (move == -1)
+	if (move == 1)
 	{
 		if (map[pos_y][(int)(player->x_ply + player->dir_x \
 			* PLAYER_SPEED * dt)] != '1')
@@ -108,12 +108,12 @@ void	manage_forward_movement(
 			* PLAYER_SPEED * dt)][pos_x] != '1')
 			player->y_ply += player->dir_y * PLAYER_SPEED * dt;
 	}
-	if (move == 1)
+	if (move == -1)
 	{
 		if (map[pos_y][(int)(player->x_ply - player->plane_x \
 			* PLAYER_SPEED * dt)] != '1')
 			player->x_ply -= player->dir_x * PLAYER_SPEED * dt;
-		if (map[(int)(player->y_ply - player->plane_y \
+		if (map[(int)(player->y_ply - player->dir_y \
 			* PLAYER_SPEED * dt)][pos_x] != '1')
 			player->y_ply -= player->dir_y * PLAYER_SPEED * dt;
 	}

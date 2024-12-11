@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:22:13 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 22:57:43 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/11 09:57:16 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,17 +35,17 @@ char	**copy_map_flood(char **map, int height)
 	return (copy);
 }
 
-int	flood_fill(char **map, int x, int y, int max_len, int height)
+int	flood_fill(char **map, int x, int y, t_data *data)
 {
-	if (x < 0 || y < 0 || y >= height || x >= max_len || map[y][x] == '\0')
+	if (x < 0 || y < 0 || y >= data->map_height || x >= data->map_width || data->map[y][x] == '\0')
 		return (0);
 	if (is_wall_or_space(map[y][x]))
 		return (1);
 	map[y][x] = ' ';
-	if (!flood_fill(map, x + 1, y, max_len, height)
-		|| !flood_fill(map, x - 1, y, max_len, height)
-		|| !flood_fill(map, x, y - 1, max_len, height)
-		|| !flood_fill(map, x, y + 1, max_len, height))
+	if (!flood_fill(map, x + 1, y, data)
+		|| !flood_fill(map, x - 1, y, data)
+		|| !flood_fill(map, x, y - 1, data)
+		|| !flood_fill(map, x, y + 1, data))
 		return (0);
 	return (1);
 }
@@ -72,8 +72,7 @@ int	is_map_closed(t_data *data)
 		{
 			if (data->map[y][x] == '0')
 			{
-				if (!flood_fill(map_copy, x, y, data->map_width,
-						data->map_height))
+				if (!flood_fill(map_copy, x, y, data))
 					return (printf("Error: Map is not closed\n"),
 						free_map(map_copy, data->map_height), 1);
 			}
