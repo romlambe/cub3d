@@ -88,12 +88,12 @@ MLX_DIR := minilibx-linux
 GNL := gnl/get_next_line.c gnl/get_next_line_utils.c
 
 # Fichiers source
-SRCS := parsing/copy_map.c parsing/manage_map.c parsing/parsing_map.c parsing/utils_parsing.c \
-	render/checker.c render/cub3d.c render/drawer.c render/fryer.c render/initialisation.c \
+SRCS := render/cub3d.c parsing/copy_map.c parsing/manage_map.c parsing/parsing_map.c parsing/utils_parsing.c \
+	render/checker.c render/drawer.c render/fryer.c render/initialisation.c \
 	render/manager.c render/mlx_utils.c render/movement.c render/render_ray.c  render/render.c\
 	render/sprites_manager.c render/sprites.c render/texture.c render/utils.c
 OBJS := $(SRCS:.c=.o)
-LIBRARY = -L/usr/X11R6/lib -lX11 -lXext
+LIBRARY = -L/usr/X11R6/lib -lX11 -lXext -lXrandr -lXi -lXfixes
 
 # Dépendances
 LIBFT := $(LIBFT_DIR)/libft.a
@@ -107,7 +107,7 @@ banner:
 
 $(NAME): $(OBJS) $(LIBFT) $(MLX) $(GNL_OBJ)
 	@echo "$(GREEN)Linking $(NAME)...$(RESET)"
-	@$(CC) $(CFLAGS) $(LIBRARY) -o $@ $^ -lm
+	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(GNL_OBJ) -L$(MLX_DIR) -lmlx -L$(LIBFT_DIR) -lft -lm $(LIBRARY)
 
 %.o: %.c
 	@$(CC) $(CFLAGS) -c $< -o $@

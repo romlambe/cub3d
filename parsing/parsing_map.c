@@ -29,7 +29,7 @@ int	parsing_map_assets(t_data *data, int fd)
 		line_split = ft_split(line, ' ');
 		free (line);
 		if (copy_assets(data, line_split) == 1)
-			return (free_tab(line_split), free_gnl(fd), 1);
+			return (free_tab(line_split), 1);
 		free_tab(line_split);
 		i--;
 	}
@@ -53,11 +53,10 @@ int	parsing_map_colors(t_data *data, int fd)
 		if (skip_line(line) == 1)
 			continue ;
 		split_line = ft_split(line, ' ');
-		split_color = trim_color(split_line + 1);
 		free(line);
-		split_color = ft_split(split_line[1], ',');
+		split_color = trim_color(split_line + 1);
 		if (copy_color(data, split_color, split_line[0]) == 1)
-			return (1);
+			return (free_tab(split_line), free_tab(split_color), free_gnl(fd), 1);
 		free_tab(split_line);
 		free_tab(split_color);
 		i--;
@@ -106,5 +105,6 @@ int	parser(t_data *data, char **av)
 		return (printf("Error: Colors isn't correctly set up\n"), 1);
 	if (parsing_map(data, fd, av[1]) == 1)
 		return (printf("Error: Map isn't correctly set up\n"), 1);
+	close(fd);
 	return (0);
 }

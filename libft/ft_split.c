@@ -13,76 +13,62 @@
 #include "libft.h"
 #include <stdio.h>
 
-int	get_nb_parts(char *str, char c)
+static char	*hihi(const char	*str, int start, int end)
 {
-	size_t	nb_parts;
-	size_t	i;
+	int		i;
+	char	*cp;
 
-	if (str[0] == 0)
-		return (0);
-	if (ft_strlen(str) == 1)
-		return (1);
-	i = 1;
-	nb_parts = 0;
-	while (str[i] != 0)
+	i = 0;
+	cp = (char *) malloc(((end - start) + 1) * sizeof(char));
+	while (start < end)
+		cp[i++] = str[start++];
+	cp[i] = 0;
+	return (cp);
+}
+
+static int	ft_count(const char *str, char sep)
+{
+	int	i;
+	int	start;
+	int	count;
+
+	i = 0;
+	count = 0;
+	while (str[i])
 	{
-		if ((str[i] == c && str[i - 1] != c)
-			|| (str[i + 1] == 0 && str[i] != c))
-		{
-			nb_parts++;
-		}
-		i++;
+		while (str[i] == sep && str[i])
+			i++;
+		start = i;
+		while (str[i] != sep && str[i])
+			i++;
+		if (start != i)
+			count++;
 	}
-	return (nb_parts);
-}
-
-char	**init_parts(char *str, char c)
-{
-	char	**parts;
-	int		nb_parts;
-
-	nb_parts = get_nb_parts(str, c);
-	parts = (char **) ft_calloc(nb_parts + 1, sizeof(char *));
-	return (parts);
-}
-
-void	fill_part(char *str, char *part, int part_len, int *start)
-{
-	int	og_pl;
-
-	if (!str[0])
-		return ;
-	og_pl = part_len;
-	while (--part_len >= 0)
-		part[part_len] = str[*start + part_len];
-	*start += og_pl;
+	return (count);
 }
 
 char	**ft_split(char const *s, char c)
 {
+	char	**tab;
 	int		i;
 	int		start;
-	int		current_part;
-	char	**parts;
+	int		j;
 
 	i = 0;
-	current_part = 0;
-	start = 0;
-	parts = init_parts((char *) s, c);
-	while (parts && current_part < get_nb_parts((char *) s, c))
+	j = 0;
+	tab = (char **) malloc((ft_count(s, c) + 1) * sizeof(char *));
+	if (!tab)
+		return (0);
+	while (s[i])
 	{
-		if (s[i] == c)
-			start++;
-		if ((s[i] != c && s[i + 1] == c)
-			|| !s[i + 1])
-		{
-			parts[current_part] = (char *) ft_calloc(i + 1 - start + 1, 1);
-			if (!parts[current_part])
-				return (free_parts(parts));
-			fill_part((char *) s, parts[current_part], i + 1 - start, &start);
-			current_part++;
-		}
-		i++;
+		while (s[i] == c && s[i])
+			i++;
+		start = i;
+		while (s[i] != c && s[i])
+			i++;
+		if (start != i)
+			tab[j++] = hihi(s, start, i);
 	}
-	return (parts);
+	tab[j] = 0;
+	return (tab);
 }

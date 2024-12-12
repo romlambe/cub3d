@@ -104,5 +104,5 @@ int	find_max_height(char *filename)
 		free (line);
 		line = get_next_line(fd);
 	}
-	return (close(fd), line_count);
+	return ((void)close(fd), line_count);
 }

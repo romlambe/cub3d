@@ -12,6 +12,22 @@
 
 #include "../cub3d.h"
 
+// char	**copy_map_flood(char **copy, t_data *data)
+// {
+// 	int		i;
+
+// 	i = 0;
+// 	while (i < data->map_height)
+// 	{
+// 		copy[i] = ft_strncpy(data->map[i], ft_strlen(data->map[i]));
+// 		if (!copy[i])
+// 			return (free_tab(copy), NULL);
+// 		printf("%s\n", copy[i]);
+// 		i++;
+// 	}
+// 	return (copy);
+// }
+
 char	**copy_map_flood(char **map, int height)
 {
 	char	**copy;
@@ -23,10 +39,10 @@ char	**copy_map_flood(char **map, int height)
 		return (printf("Can't copy the map"), NULL);
 	while (i < height)
 	{
-		copy[i] = ft_strdup(map[i]);
+		copy[i] = ft_strncpy(map[i], ft_strlen());
 		if (!copy[i])
 		{
-			free_map(map, height);
+			free_tab(copy);
 			return (NULL);
 		}
 		i++;
@@ -55,20 +71,41 @@ int	is_wall_or_space(char c)
 	return (c == '1' || c == ' ' || c == '\0');
 }
 
+// int	allocate_map_flood(char **map, t_data *data)
+// {
+// 	int		i;
+
+// 	i = 0;
+// 	map = malloc(sizeof(char *) * (data->map_height + 1));
+// 	if (!map)
+// 		return 1;
+// 	printf("height alloué");
+// 	while (i < data->map_height)
+// 	{
+// 		map[i] = malloc(sizeof(char) * (data->map_width + 1));
+// 		if (!map[i])
+// 			return 1;
+// 		i++;
+// 	}
+// 	map[i] = 0;
+// 	return 0;
+// }
+
 int	is_map_closed(t_data *data)
 {
 	char	**map_copy;
-	int		x;
+	size_t	x;
 	int		y;
 
-	map_copy = copy_map_flood(data->map, data->map_height);
+	printf("map allocated");
+	map_copy = copy_map_flood(map_copy, data);
 	if (!map_copy)
 		return (printf("Error copy map"), 0);
 	y = -1;
 	while (++y < data->map_height)
 	{
 		x = -1;
-		while (++x < data->map_width)
+		while (++x < ft_strlen(data->map[y]))
 		{
 			if (data->map[y][x] == '0')
 			{
@@ -78,7 +115,7 @@ int	is_map_closed(t_data *data)
 			}
 		}
 	}
-	return (free_map(map_copy, data->map_height), 0);
+	return (free_tab(map_copy), 0);
 }
 
 int	available_name(char *name)

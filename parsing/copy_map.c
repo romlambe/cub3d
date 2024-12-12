@@ -55,7 +55,7 @@ int	copy_map(t_data *data, char *filename)
 	{
 		if (*line == '0' || *line == '1')
 		{
-			data->map[i] = ft_strdup(line);
+			data->map[i] = ft_strncpy(line, ft_strlen(line));
 			i++;
 		}
 		free(line);
@@ -70,8 +70,8 @@ int	copy_assets(t_data *data, char **split_line)
 {
 	char	*texture_path;
 
-	if (!split_line[1])
-		return (1);
+	if (!split_line || !split_line[0] || !split_line[1])
+   		return (printf("Error: Invalid split_line content\n"), 1);
 	texture_path = ft_strncpy(split_line[1], ft_strchr_i(split_line[1], '\n'));
 	if (!texture_path)
 		return (printf("Error: Failed to extract texture path\n"), 1);
@@ -85,6 +85,6 @@ int	copy_assets(t_data *data, char **split_line)
 		get_texture(data, texture_path, &(data->assets.e_texture));
 	else
 		return (free(texture_path),
-			printf("Error: Incorret texture path\n"), 1);
+			(void) printf("Error: Incorret texture path\n"), 1);
 	return (free(texture_path), 0);
 }
