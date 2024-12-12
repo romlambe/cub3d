@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/11 09:57:58 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/12 14:14:12 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -188,7 +188,7 @@ int				copy_map(t_data *data, char *filename);
 int				copy_assets(t_data *data, char **split_line);
 
 // MANAGE MAP //
-char			**copy_map_flood(char **map, int height)
+char			**copy_map_flood(char **map, int height);
 int				flood_fill(char **map, int x, int y, t_data *data);
 int				is_wall_or_space(char c);
 int				is_map_closed(t_data *data);
