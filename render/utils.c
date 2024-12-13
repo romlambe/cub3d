@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 10:08:37 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 23:29:48 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:02:06 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,5 @@ int	int_abs(int value)
 int	close_window(t_data *data)
 {
 	free_data(data);
-	// free_tab(data->map);
 	exit(0);
 }

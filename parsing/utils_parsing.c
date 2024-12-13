@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:17:24 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 23:06:25 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:16:14 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,13 +37,14 @@ char	**trim_color(char **split_color)
 		index = -1;
 		while ((*split_color)[++index])
 		{
-			if ((*split_color)[index] != ' ' && (*split_color)[index] != '\n')
+			if ((*split_color)[index] != ' ' && (*split_color)[index] != '\n'
+			&& (*split_color)[index] != '	')
 				no32str[goat++] = (*split_color)[index];
 		}
 		split_color++;
 	}
 	no32str[goat] = 0;
-	perfect_color = ft_split(no32str, ',');
+	perfect_color = ft_split(no32str, ",");
 	return (free(no32str), perfect_color);
 }
 

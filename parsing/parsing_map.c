@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:16:55 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 22:54:51 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:35:50 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ int	parsing_map_assets(t_data *data, int fd)
 			return (1);
 		if (skip_line(line) == 1)
 			continue ;
-		line_split = ft_split(line, ' ');
+		line_split = ft_split(line, " \t");
 		free (line);
 		if (copy_assets(data, line_split) == 1)
 			return (free_tab(line_split), 1);
@@ -51,14 +51,13 @@ int	parsing_map_colors(t_data *data, int fd)
 		if (!line)
 			break ;
 		if (skip_line(line) == 1)
-		{
 			continue ;
-		}
-		split_line = ft_split(line, ' ');
+		split_line = ft_split(line, " \t");
 		free(line);
 		split_color = trim_color(split_line + 1);
 		if (copy_color(data, split_color, split_line[0]) == 1)
-			return (free_tab(split_line), free_tab(split_color), free_gnl(fd), 1);
+			return (free_tab(split_line), free_tab(split_color),
+				free_gnl(fd), 1);
 		free_tab(split_line);
 		free_tab(split_color);
 		i--;
@@ -73,9 +72,7 @@ int	parsing_map(t_data *data, int fd, char *filename)
 
 	i = 0;
 	data->map_width = find_max_len(fd);
-	printf("%d\n", data->map_width);
 	data->map_height = find_max_height(filename);
-	printf("%d\n", data->map_height);
 	while (i)
 	{
 		line = get_next_line(fd);
@@ -102,13 +99,16 @@ int	parser(t_data *data, char **av)
 
 	fd = open(av[1], O_RDONLY);
 	if (fd == -1)
-		return (printf("Error: Can't open the map\n"), 1);
+		return ((void)printf("Error: Can't open the map\n"), 1);
 	if (parsing_map_assets(data, fd) == 1)
-		return (printf("Error: Assets isn't correctly set up\n"), 1);
+		return ((void)printf("Error: Assets isn't correctly set up\n"),
+			(void)close(fd), 1);
 	if (parsing_map_colors(data, fd) == 1)
-		return (printf("Error: Colors isn't correctly set up\n"), 1);
+		return ((void)printf("Error: Colors isn't correctly set up\n"),
+		(void)close(fd), 1);
 	if (parsing_map(data, fd, av[1]) == 1)
-		return (printf("Error: Map isn't correctly set up\n"), 1);
+		return ((void)printf("Error: Map isn't correctly set up\n"),
+		(void)close(fd), 1);
 	close(fd);
 	return (0);
 }

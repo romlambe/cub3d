@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/10/05 09:47:37 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 23:38:44 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:17:20 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ void	ft_putchar_fd(char c, int fd);
 void	ft_putendl_fd(char *str, int fd);
 void	ft_putnbr_fd(int n, int fd);
 void	ft_putstr_fd(char *str, int fd);
-char	**ft_split(char const *s, char c);
+char	**ft_split(char *str, char *charset);
 int		get_nb_parts(char *str, char c);
 char	**init_parts(char *str, char c);
 void	fill_part(char *str, char *part, int part_len, int *start);

@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 10:04:45 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 23:29:11 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:44:59 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,8 +22,13 @@ int	main(int ac, char **av)
 	if (available_name(av[1]) == 1)
 		return (printf("Error: Invalid file type\n"), 1);
 	init_data(&data);
-	if (parser(&data, av) == 1 || is_map_closed(&data) == 1)
-		return (free_data(&data), 1);
+	if (parser(&data, av) == 1){
+		close_window(&data);
+	}
+	if (is_map_closed(&data) == 1){
+		close_window(&data);
+	}
+
 	data.mlx_win = mlx_new_window(data.mlx, data.win_width, data.win_height, \
 		"CUB3 PAR ROMAIN, veigar");
 	mlx_do_key_autorepeatoff(data.mlx);

@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:19:44 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 23:07:23 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:23:10 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,7 +70,7 @@ int	copy_assets(t_data *data, char **split_line)
 	char	*texture_path;
 
 	if (!split_line || !split_line[0] || !split_line[1])
-   		return (printf("Error: Invalid split_line content\n"), 1);
+		return (printf("Error: Invalid split_line content\n"), 1);
 	texture_path = ft_strncpy(split_line[1], ft_strchr_i(split_line[1], '\n'));
 	if (!texture_path)
 		return (printf("Error: Failed to extract texture path\n"), 1);

@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:05:03 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 23:10:04 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/13 14:54:41 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,6 @@ t_image	*choose_texture(t_data *data, int side)
 
 void	get_texture(t_data *data, char *path, t_image *texture)
 {
-	printf("%s\n", path);
 	texture->img = mlx_xpm_file_to_image(data->mlx, path,
 			&(texture->width), &(texture->height));
 	if (!texture->img)
