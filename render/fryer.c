@@ -55,10 +55,8 @@ void	free_data(t_data *data)
 	if (data->sprites)
 		free(data->sprites);
 	printf("triplé2\n");
-	if (data->map){
-		printf("triplé3\n");
+	if (data->map)
 		free_tab(data->map);
-	}
 }
 
 void	free_tab(char **tab)
@@ -68,7 +66,7 @@ void	free_tab(char **tab)
 	// if (!tab)
 	// 	return ;
 	i = 0;
-	while (tab[i] && tab)
+	while (tab && tab[i])
 	{
 		free(tab[i]);
 		i++;

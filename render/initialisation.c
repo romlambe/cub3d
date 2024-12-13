@@ -36,6 +36,7 @@ void	init_data(t_data *data)
 	data->n_sprites = 0;
 	data->sprites = NULL;
 	data->deltatime = 0;
+	data->map = NULL;
 }
 
 void	init_player(t_data *data, char direction, int y, int x)
