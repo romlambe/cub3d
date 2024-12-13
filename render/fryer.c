@@ -39,8 +39,8 @@ void	free_data(t_data *data)
 	int	i;
 
 	i = 0;
-	while (i++ < data->n_sprites)
-		mlx_destroy_image(data->mlx, data->sprites[i].texture.img);
+	while (i < data->n_sprites)
+		mlx_destroy_image(data->mlx, data->sprites[i++].texture.img);
 	free_assets(data);
 	if (data->mlx_win)
 		mlx_destroy_window(data->mlx, data->mlx_win);
@@ -50,6 +50,9 @@ void	free_data(t_data *data)
 		free(data->mlx);
 	if (data->sprites)
 		free(data->sprites);
+	if (data->map)
+		free_tab(data->map);
+
 }
 
 void	free_tab(char **tab)
@@ -59,7 +62,10 @@ void	free_tab(char **tab)
 	if (!tab)
 		return ;
 	i = 0;
-	while (tab[i++])
+	while (tab[i])
+	{
 		free(tab[i]);
+		i++;
+	}
 	free(tab);
 }

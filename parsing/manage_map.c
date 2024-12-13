@@ -71,30 +71,30 @@ int	is_wall_or_space(char c)
 	return (c == '1' || c == ' ' || c == '\0');
 }
 
-char	**allocate_map_flood(t_data *data)
+int	allocate_map_flood(t_data *data, char **copy)
 {
 	int		i;
-	char	**copy;
 
 	i = 0;
-	copy = malloc(sizeof(char *) * (data->map_height + 1));
-	if (!copy)
-		return NULL;
-
+	// copy = malloc(sizeof(char *) * (data->map_height + 1));
+	// if (!copy)
+	// 	return NULL;
 	while (i < data->map_height)
 	{
-		copy[i] = malloc(sizeof(char) * (ft_strlen(data->map[i]) + 1));
+		copy[i] = ft_strdup(data->map[i]);
+
+		// copy[i] = malloc(sizeof(char) * (ft_strlen(data->map[i]) + 1));
 		if (!copy[i])
 		{
 			while(i-- >0)
 				free(copy[i]);
-			return (free(copy), NULL);
+			return (free(copy), 1);
 		}
-		copy[i] = ft_strncpy(data->map[i], ft_strlen(data->map[i]));
+		// copy[i] = ft_strncpy(data->map[i], ft_strlen(data->map[i]));
 		i++;
 	}
-	copy[data->map_height] = 0;
-	return copy;
+	copy[data->map_height] = '\0';
+	return 0;
 }
 
 int	is_map_closed(t_data *data)
@@ -103,8 +103,10 @@ int	is_map_closed(t_data *data)
 	size_t	x;
 	int		y;
 
-
-	map_copy = allocate_map_flood(data);
+	map_copy = malloc(sizeof(char *) * (data->map_height + 1));
+	if (!map_copy)
+		return 1;
+	allocate_map_flood(data, map_copy);
 	if (!map_copy)
 		return (printf("Error copy map"), 0);
 	y = -1;
@@ -116,8 +118,10 @@ int	is_map_closed(t_data *data)
 			if (data->map[y][x] == '0')
 			{
 				if (!flood_fill(map_copy, x, y, data))
+				{
 					return (printf("Error: Map is not closed\n"),
-						free_map(map_copy, data->map_height), 1);
+						free_tab(map_copy), 1);
+				}
 			}
 		}
 	}

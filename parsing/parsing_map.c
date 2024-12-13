@@ -51,7 +51,9 @@ int	parsing_map_colors(t_data *data, int fd)
 		if (!line)
 			break ;
 		if (skip_line(line) == 1)
+		{
 			continue ;
+		}
 		split_line = ft_split(line, ' ');
 		free(line);
 		split_color = trim_color(split_line + 1);
@@ -71,7 +73,9 @@ int	parsing_map(t_data *data, int fd, char *filename)
 
 	i = 0;
 	data->map_width = find_max_len(fd);
+	printf("%d\n", data->map_width);
 	data->map_height = find_max_height(filename);
+	printf("%d\n", data->map_height);
 	while (i)
 	{
 		line = get_next_line(fd);

@@ -19,9 +19,6 @@ int	copy_color(t_data *data, char **split_color, char *color)
 		data->assets.f_color[0] = ft_atoi(split_color[0]);
 		data->assets.f_color[1] = ft_atoi(split_color[1]);
 		data->assets.f_color[2] = ft_atoi(split_color[2]);
-		if (!data->assets.f_color[0] || !data->assets.f_color[1]
-			|| !data->assets.f_color[2])
-			return (1);
 		if (is_color_is_correct(data->assets.f_color[0],
 				data->assets.f_color[1], data->assets.f_color[2]) == 1)
 			return (1);
@@ -55,12 +52,14 @@ int	copy_map(t_data *data, char *filename)
 	{
 		if (*line == '0' || *line == '1')
 		{
-			data->map[i] = ft_strncpy(line, ft_strlen(line));
+			free(data->map[i]);
+			data->map[i] = ft_strncpy(line, data->map_width);
 			i++;
 		}
 		free(line);
 		line = get_next_line(fd);
 	}
+	free(line);
 	if (search_player_pos(data) != 0)
 		return (printf("Error: player position not found\n"), 1);
 	return (0);

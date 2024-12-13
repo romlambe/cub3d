@@ -32,5 +32,5 @@ int	close_window(t_data *data)
 {
 	free_data(data);
 	// free_tab(data->map);
-	return (exit(0), 0);
+	exit(0);
 }

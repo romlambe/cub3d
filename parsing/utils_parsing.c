@@ -47,22 +47,28 @@ char	**trim_color(char **split_color)
 	return (free(no32str), perfect_color);
 }
 
-int	allocate_map(t_data *data, int rows, int columns)
+int	allocate_map(t_data *data, int map_width, int map_height)
 {
 	int	i;
 
 	i = 0;
-	data->map = malloc(sizeof(char *) * (rows + 1));
+	data->map = malloc(sizeof(char *) * (map_height + 1));
 	if (!data->map)
 		return (printf("Error: memories\n"), 1);
-	while (i < rows)
+	while (i < map_height)
 	{
-		data->map[i] = malloc(sizeof(char) * (columns + 1));
+		data->map[i] = malloc(sizeof(char) * (map_width + 1));
 		if (!data->map[i])
+		{
+			while (i > 0)
+				free(data->map[i--]);
+			free(data->map);
 			return (printf("Error: memories columns\n"), 1);
+		}
+		ft_memset(data->map[i], 0, map_width + 1);
 		i++;
 	}
-	data->map[rows] = 0;
+	data->map[map_height] = NULL;
 	return (0);
 }
 
@@ -92,10 +98,10 @@ int	find_max_height(char *filename)
 	char	*line;
 
 	fd = open(filename, O_RDONLY);
-	line_count = 0;
-	line = get_next_line(fd);
 	if (fd == -1)
 		return (-1);
+	line_count = 0;
+	line = get_next_line(fd);
 	while (line)
 	{
 		if (*line && (*line == '1' || *line == '0' || *line == '\t'

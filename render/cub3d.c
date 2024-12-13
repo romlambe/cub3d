@@ -32,5 +32,6 @@ int	main(int ac, char **av)
 	mlx_hook(data.mlx_win, 17, 0, close_window, &data);
 	mlx_loop_hook(data.mlx, render_cube, &data);
 	mlx_loop(data.mlx);
+	free_data(&data);
 	return (0);
 }
