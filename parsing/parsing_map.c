@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:16:55 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/13 15:35:50 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/13 16:46:19 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -70,10 +70,10 @@ int	parsing_map(t_data *data, int fd, char *filename)
 	char	*line;
 	int		i;
 
-	i = 0;
+	i = -1;
 	data->map_width = find_max_len(fd);
 	data->map_height = find_max_height(filename);
-	while (i)
+	while (++i)
 	{
 		line = get_next_line(fd);
 		if (!line)
@@ -86,8 +86,9 @@ int	parsing_map(t_data *data, int fd, char *filename)
 				return (free_gnl(fd), 1);
 		}
 		free(line);
-		i++;
 	}
+	if (data->map_height < 3 && data->map_width < 3)
+		return (1);
 	allocate_map(data, data->map_width, data->map_height);
 	copy_map(data, filename);
 	return (0);
@@ -105,10 +106,10 @@ int	parser(t_data *data, char **av)
 			(void)close(fd), 1);
 	if (parsing_map_colors(data, fd) == 1)
 		return ((void)printf("Error: Colors isn't correctly set up\n"),
-		(void)close(fd), 1);
+			(void)close(fd), 1);
 	if (parsing_map(data, fd, av[1]) == 1)
 		return ((void)printf("Error: Map isn't correctly set up\n"),
-		(void)close(fd), 1);
+			(void)close(fd), 1);
 	close(fd);
 	return (0);
 }

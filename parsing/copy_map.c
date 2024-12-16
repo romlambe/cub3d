@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:19:44 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/13 15:23:10 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/16 09:18:58 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int	copy_map(t_data *data, char *filename)
 	line = get_next_line(fd);
 	while (line)
 	{
-		if (*line == '0' || *line == '1')
+		if (*line == '0' || *line == '1' || *line == ' ')
 		{
 			free(data->map[i]);
 			data->map[i] = ft_strncpy(line, data->map_width);

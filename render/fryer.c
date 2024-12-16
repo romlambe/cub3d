@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 10:04:32 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/13 15:45:39 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/13 15:53:06 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,18 +24,14 @@ void	free_map(char **map, int height)
 
 void	free_assets(t_data *data)
 {
-	{
-		if (data->assets.n_texture.img)
-			mlx_destroy_image(data->mlx, data->assets.n_texture.img);
-		if (data->assets.s_texture.img)
-			mlx_destroy_image(data->mlx, data->assets.s_texture.img);
-		if (data->assets.e_texture.img)
-			mlx_destroy_image(data->mlx, data->assets.e_texture.img);
-		if (data->assets.w_texture.img)
-			mlx_destroy_image(data->mlx, data->assets.w_texture.img);
-		printf("triplé\n");
-	}
-
+	if (data->assets.n_texture.img)
+		mlx_destroy_image(data->mlx, data->assets.n_texture.img);
+	if (data->assets.s_texture.img)
+		mlx_destroy_image(data->mlx, data->assets.s_texture.img);
+	if (data->assets.e_texture.img)
+		mlx_destroy_image(data->mlx, data->assets.e_texture.img);
+	if (data->assets.w_texture.img)
+		mlx_destroy_image(data->mlx, data->assets.w_texture.img);
 }
 
 void	free_data(t_data *data)
@@ -54,7 +50,6 @@ void	free_data(t_data *data)
 		free(data->mlx);
 	if (data->sprites)
 		free(data->sprites);
-	printf("triplé2\n");
 	if (data->map)
 		free_tab(data->map);
 }
@@ -63,8 +58,6 @@ void	free_tab(char **tab)
 {
 	int	i;
 
-	// if (!tab)
-	// 	return ;
 	i = 0;
 	while (tab && tab[i])
 	{
