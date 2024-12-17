@@ -86,7 +86,7 @@ void	draw_sprite_stripe(
 	int	tex_y;
 	int	color;
 
-	tex_x = (int)(256 * (stripe - \
+	tex_x = (int)(256 * (stripe - 
 		(-transform->sprite_width / 2 + transform->sprite_screen_x)) * 64
 			/ transform->sprite_width) / 256;
 	if (transform->transform_y > 0
@@ -95,7 +95,7 @@ void	draw_sprite_stripe(
 		y = transform->draw_start_y;
 		while (y < transform->draw_end_y)
 		{
-			d = (y - transform->v_move_screen) * 256 - img->data->win_height \
+			d = (y - transform->v_move_screen) * 256 - img->data->win_height 
 				* 128 + transform->sprite_height * 128;
 			tex_y = ((d * 64) / transform->sprite_height) / 256;
 			color = get_pixel_color(&img->data->sprites[sprite_index].texture,
