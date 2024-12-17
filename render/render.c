@@ -55,7 +55,7 @@ void	render_raycast(t_image *img, t_data *data, t_player *player)
 		free(ray);
 	}
 	draw_sprite(data, img);
-	switch_texture(data);
+	// switch_texture(data);
 	data->old_fps = data->fps;
 	data->fps = get_time();
 	data->deltatime = (data->fps - data->old_fps) / 1000.0;

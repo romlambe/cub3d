@@ -18,13 +18,14 @@ void	initialize_sprite_distance(t_data *data, int *sprite_order,
 	int	i;
 
 	i = 0;
-	while (i++ < data->n_sprites)
+	while (i < data->n_sprites)
 	{
 		sprite_order[i] = i;
 		sprite_distance[i] = ((data->player.y_ply - data->sprites[i].x)
 				*(data->player.y_ply - data->sprites[i].x)
 				+ (data->player.x_ply - data->sprites[i].y)
 				*(data->player.x_ply - data->sprites[i].y));
+		i++;
 	}
 }
 
