@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 10:04:50 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 23:09:06 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/18 12:15:47 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,7 @@ void	draw_floor_ceilling(t_image *image, int x)
 	while (++y < image->data->win_height - 1)
 		draw_pixel(image, x, y, f_color);
 }
+
 
 void	draw_wall_stripe(t_draw_wall *wall, t_image *img, int x)
 {

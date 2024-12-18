@@ -6,7 +6,7 @@
 #    By: romlambe <marvin@42.fr>                    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2024/07/04 15:52:08 by romlambe          #+#    #+#              #
-#    Updated: 2024/12/10 16:28:33 by romlambe         ###   ########.fr        #
+#    Updated: 2024/12/18 15:40:22 by romlambe         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -91,7 +91,7 @@ GNL := gnl/get_next_line.c gnl/get_next_line_utils.c
 SRCS := render/cub3d.c parsing/copy_map.c parsing/manage_map.c parsing/parsing_map.c parsing/utils_parsing.c \
 	render/checker.c render/drawer.c render/fryer.c render/initialisation.c \
 	render/manager.c render/mlx_utils.c render/movement.c render/render_ray.c  render/render.c\
-	render/sprites_manager.c render/sprites.c render/texture.c render/utils.c
+	render/sprites_manager.c render/sprites.c render/texture.c render/utils.c crosshair/crosshair.c
 OBJS := $(SRCS:.c=.o)
 LIBRARY = -L/usr/X11R6/lib -lX11 -lXext -lXrandr -lXi -lXfixes
 

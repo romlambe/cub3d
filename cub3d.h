@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/17 16:24:49 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:17:29 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,8 @@
 # define ROTATION_SPEED 30
 # define PLAYER_SPEED 5
 # define FOV 60
+
+# define CROSSHAIR_SIZE 10
 
 # define KEY_ESC 65307
 # define KEY_Z 122
@@ -133,6 +135,7 @@ typedef struct s_data
 	char		file_content;
 	int			map_height;
 	int			map_width;
+	unsigned char			*cloud_texture;
 }	t_data;
 
 typedef struct s_queue_node
@@ -296,5 +299,7 @@ void			switch_texture(t_data *data);
 long long		get_time(void);
 int				int_abs(int value);
 int				close_window(t_data *data);
+
+void draw_crosshair(t_image *image, int center_x, int center_y);
 
 #endif

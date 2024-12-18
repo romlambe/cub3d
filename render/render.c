@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:02:46 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/10 23:14:46 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:17:26 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,9 @@ int	render_cube(t_data *data)
 	main.addr = mlx_get_data_addr(main.img, &(main.bpp),
 			&(main.size_line), &(main.endian));
 	render_raycast(&main, data, &(data->player));
+    int center_x = data->win_width / 2;
+    int center_y = data->win_height / 2;
+    draw_crosshair(&main, center_x, center_y);
 	mlx_put_image_to_window(data->mlx, data->mlx_win, main.img, 0, 0);
 	mlx_destroy_image(data->mlx, main.img);
 	return (0);
