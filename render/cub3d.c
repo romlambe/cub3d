@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 10:04:45 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/13 15:53:38 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/18 11:19:31 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,6 +32,8 @@ int	main(int ac, char **av)
 	mlx_hook(data.mlx_win, 2, 1L << 0, manage_input_press, &data);
 	mlx_hook(data.mlx_win, 3, 1L << 1, manage_input_release, &data);
 	mlx_hook(data.mlx_win, 17, 0, close_window, &data);
+	mlx_hook(data.mlx_win, 6, 1L << 6, manage_mouse, &data);
+	mlx_mouse_hide(data.mlx, data.mlx_win);
 	mlx_loop_hook(data.mlx, render_cube, &data);
 	mlx_loop(data.mlx);
 	free_data(&data);

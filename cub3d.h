@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/12 14:14:12 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/17 16:24:49 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -234,6 +234,7 @@ void			init_assets(t_assets *assets);
 void			init_data(t_data *data);
 
 // MANAGER //
+int				manage_mouse(int x, int y, t_data *data);
 void			manage_right_camera_mov(t_player *player, double dt);
 void			manage_left_camera_mov(t_player *player, double dt);
 int				manage_input_release(int keycode, t_data *data);

@@ -6,11 +6,33 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 10:04:56 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/11 09:39:58 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/18 11:19:08 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
+
+int	manage_mouse(int x, int y, t_data *data)
+{
+	(void)y;
+	int	center_y;
+	int	center_x;
+	int	delta_x;
+
+	center_y = data->win_height / 2;
+	center_x = data->win_width / 2;
+	delta_x = x - center_x;
+
+	if (delta_x == 0)
+		return (0);
+	if (delta_x < 0)
+		manage_left_camera_mov(&(data->player),(data->deltatime * -delta_x / 75.0));
+	else if (x > data->mouse_x)
+		manage_right_camera_mov(&(data->player), (data->deltatime * delta_x / 75.0));
+	data->mouse_x = x;
+	mlx_mouse_move(data->mlx, data->mlx_win, center_x, center_y);
+	return (0);
+}
 
 void	manage_left_camera_mov(t_player *player, double dt)
 {
