@@ -25,6 +25,7 @@ void	init_color_bonus(t_data *data)
 void	init_texture_bonus(t_data *data)
 {
 	char	*texture_path;
+	
 	texture_path = ft_strncpy("./textures/hello_kitty.xpm", 28);
 	if (!texture_path)
 		return ;
