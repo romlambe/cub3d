@@ -1,7 +1,7 @@
 NO ./textures/hello_kitty.xpm
-SO ./textures/eagle.xpm
-WE ./textures/purplestone.xpm
-EA ./textures/wall_4.xpm
+SO ./textures/hello_kitty.xpm
+WE ./textures/hello_kitty.xpm
+EA ./textures/hello_kitty.xpm
 
 F 144,238,144
 C 135,206,250
