@@ -1,9 +1,9 @@
-NO ./textures/hello_kitty.xpm
-SO ./textures/hello_kitty.xpm
-WE ./textures/hello_kitty.xpm
-EA ./textures/hello_kitty.xpm
+NO ./textures/eagle.xpm
+SO ./textures/bluestone.xpm
+WE ./textures/purplestone.xpm
+EA ./textures/wall_4.xpm
 
-F 253,217,235
+F 0,217,235
 C 253,217,235
 
 111111
@@ -11,3 +11,6 @@ C 253,217,235
 1001 11
 100S101
 1111111
+
+
+

@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:02:46 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/18 16:17:26 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:13:15 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,6 +71,7 @@ int	render_cube(t_data *data)
 	main.addr = mlx_get_data_addr(main.img, &(main.bpp),
 			&(main.size_line), &(main.endian));
 	render_raycast(&main, data, &(data->player));
+	//changer le crosshair
     int center_x = data->win_width / 2;
     int center_y = data->win_height / 2;
     draw_crosshair(&main, center_x, center_y);

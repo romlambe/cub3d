@@ -6,13 +6,13 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:16:55 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/13 16:46:19 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:45:11 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int	parsing_map_assets(t_data *data, int fd)
+int	parsing_map_assets(t_data *data, int fd, int bonus)
 {
 	char	*line;
 	char	**line_split;
@@ -28,7 +28,7 @@ int	parsing_map_assets(t_data *data, int fd)
 			continue ;
 		line_split = ft_split(line, " \t");
 		free (line);
-		if (copy_assets(data, line_split) == 1)
+		if (copy_assets(data, line_split, bonus) == 1)
 			return (free_tab(line_split), 1);
 		free_tab(line_split);
 		i--;
@@ -36,7 +36,7 @@ int	parsing_map_assets(t_data *data, int fd)
 	return (check_assets(data, fd));
 }
 
-int	parsing_map_colors(t_data *data, int fd)
+int	parsing_map_colors(t_data *data, int fd, int bonus)
 {
 	char	*line;
 	char	**split_line;
@@ -55,7 +55,7 @@ int	parsing_map_colors(t_data *data, int fd)
 		split_line = ft_split(line, " \t");
 		free(line);
 		split_color = trim_color(split_line + 1);
-		if (copy_color(data, split_color, split_line[0]) == 1)
+		if (copy_color(data, split_color, split_line[0], bonus) == 1)
 			return (free_tab(split_line), free_tab(split_color),
 				free_gnl(fd), 1);
 		free_tab(split_line);
@@ -94,17 +94,17 @@ int	parsing_map(t_data *data, int fd, char *filename)
 	return (0);
 }
 
-int	parser(t_data *data, char **av)
+int	parser(t_data *data, char **av, int bonus)
 {
 	int	fd;
 
 	fd = open(av[1], O_RDONLY);
 	if (fd == -1)
 		return ((void)printf("Error: Can't open the map\n"), 1);
-	if (parsing_map_assets(data, fd) == 1)
+	if (parsing_map_assets(data, fd, bonus) == 1)
 		return ((void)printf("Error: Assets isn't correctly set up\n"),
 			(void)close(fd), 1);
-	if (parsing_map_colors(data, fd) == 1)
+	if (parsing_map_colors(data, fd, bonus) == 1)
 		return ((void)printf("Error: Colors isn't correctly set up\n"),
 			(void)close(fd), 1);
 	if (parsing_map(data, fd, av[1]) == 1)

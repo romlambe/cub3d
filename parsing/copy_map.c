@@ -6,14 +6,16 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 11:19:44 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/16 09:18:58 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/19 18:33:43 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "../cub3d.h"
 
-int	copy_color(t_data *data, char **split_color, char *color)
+int	copy_color(t_data *data, char **split_color, char *color, int bonus)
 {
+	if (bonus == 1)
+		return(init_color_bonus(data), 0);
 	if (color[0] == 'F' && color[1] == '\0')
 	{
 		data->assets.f_color[0] = ft_atoi(split_color[0]);
@@ -65,25 +67,30 @@ int	copy_map(t_data *data, char *filename)
 	return (0);
 }
 
-int	copy_assets(t_data *data, char **split_line)
+int	copy_assets(t_data *data, char **split_line, int bonus)
 {
-	char	*texture_path;
-
-	if (!split_line || !split_line[0] || !split_line[1])
-		return (printf("Error: Invalid split_line content\n"), 1);
-	texture_path = ft_strncpy(split_line[1], ft_strchr_i(split_line[1], '\n'));
-	if (!texture_path)
-		return (printf("Error: Failed to extract texture path\n"), 1);
-	if (ft_strcmp(split_line[0], "NO") == 0)
-		get_texture(data, texture_path, &(data->assets.n_texture));
-	else if (ft_strcmp(split_line[0], "SO") == 0)
-		get_texture(data, texture_path, &(data->assets.s_texture));
-	else if (ft_strcmp(split_line[0], "WE") == 0)
-		get_texture(data, texture_path, &(data->assets.w_texture));
-	else if (ft_strcmp(split_line[0], "EA") == 0)
-		get_texture(data, texture_path, &(data->assets.e_texture));
+	if (bonus == 1)
+		return (init_texture_bonus(data), 0);
 	else
-		return (free(texture_path),
-			(void) printf("Error: Incorret texture path\n"), 1);
-	return (free(texture_path), 0);
+	{
+		char	*texture_path;
+
+		if (!split_line || !split_line[0] || !split_line[1])
+			return (printf("Error: Invalid split_line content\n"), 1);
+		texture_path = ft_strncpy(split_line[1], ft_strchr_i(split_line[1], '\n'));
+		if (!texture_path)
+			return (printf("Error: Failed to extract texture path\n"), 1);
+		if (ft_strcmp(split_line[0], "NO") == 0)
+			get_texture(data, texture_path, &(data->assets.n_texture));
+		else if (ft_strcmp(split_line[0], "SO") == 0)
+			get_texture(data, texture_path, &(data->assets.s_texture));
+		else if (ft_strcmp(split_line[0], "WE") == 0)
+			get_texture(data, texture_path, &(data->assets.w_texture));
+		else if (ft_strcmp(split_line[0], "EA") == 0)
+			get_texture(data, texture_path, &(data->assets.e_texture));
+		else
+			return (free(texture_path),
+				(void) printf("Error: Incorret texture path\n"), 1);
+		return (free(texture_path), 0);
+	}
 }

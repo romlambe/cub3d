@@ -6,7 +6,7 @@
 /*   By: romlambe <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/09/11 15:15:20 by romlambe          #+#    #+#             */
-/*   Updated: 2024/12/18 16:17:29 by romlambe         ###   ########.fr       */
+/*   Updated: 2024/12/19 16:44:29 by romlambe         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -186,9 +186,10 @@ typedef struct s_ray
 }			t_ray;
 
 // COPY MAP //
-int				copy_color(t_data *data, char **split_color, char *color);
+int				copy_color(t_data *data, char **split_color, char *color,
+					int bonus);
 int				copy_map(t_data *data, char *filename);
-int				copy_assets(t_data *data, char **split_line);
+int				copy_assets(t_data *data, char **split_line, int bonus);
 
 // MANAGE MAP //
 char			**copy_map_flood(char **map, int height);
@@ -198,10 +199,10 @@ int				is_map_closed(t_data *data);
 int				available_name(char *name);
 
 // PARSING MAP //
-int				parsing_map_assets(t_data *data, int fd);
-int				parsing_map_colors(t_data *data, int fd);
+int				parsing_map_assets(t_data *data, int fd, int bonus);
+int				parsing_map_colors(t_data *data, int fd, int bonus);
 int				parsing_map(t_data *data, int fd, char *filename);
-int				parser(t_data *data, char **av);
+int				parser(t_data *data, char **av, int bonus);
 
 // UTILS PARSING //
 int				skip_line(char *line);
@@ -301,5 +302,8 @@ int				int_abs(int value);
 int				close_window(t_data *data);
 
 void draw_crosshair(t_image *image, int center_x, int center_y);
+
+void	init_color_bonus(t_data *data);
+void	init_texture_bonus(t_data *data);
 
 #endif
