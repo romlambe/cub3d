@@ -3,8 +3,8 @@ SO ./textures/hello_kitty.xpm
 WE ./textures/hello_kitty.xpm
 EA ./textures/hello_kitty.xpm
 
-F 144,238,144
-C 135,206,250
+F 253,217,235
+C 253,217,235
 
 111111
 1000001
