@@ -34,6 +34,7 @@ void	free_assets(t_data *data)
 		mlx_destroy_image(data->mlx, data->assets.w_texture.img);
 }
 
+
 void	free_data(t_data *data)
 {
 	int	i;

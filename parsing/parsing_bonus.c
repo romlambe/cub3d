@@ -26,7 +26,7 @@ void	init_texture_bonus(t_data *data)
 {
 	char	*texture_path;
 	
-	texture_path = ft_strncpy("./textures/hello_kitty.xpm", 28);
+	texture_path = ft_strncpy("./textures/hello_kitty.xpm", 26);
 	if (!texture_path)
 		return ;
 	get_texture(data, texture_path, &(data->assets.n_texture));
